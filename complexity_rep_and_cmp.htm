@@ -1,0 +1,172 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>比較演算法好壞的標準之一是時間複雜度，當然你也可以做空間複雜度的比較，概念非常相似，在本篇就不贅述。而在定義時間複雜度之前，我們要先提及兩個在分析上的預設觀念：</p>
+<ul>
+	<li>比較處理同一個問題的不同演算法時，預設考慮輸入數量 n 很大的狀況：例如以不同的排序演算法而言，要被排序的陣列長度 n 比較短的時候，可能會是演算法 A 跑得比較快；但是若當 n 夠大的時候，演算法 B 會穩定勝出；則在尚未被告知 n 是多少的情況下，我們會先說演算法 B 比較好。</li>
+	<li>比較同一個演算法面對不同輸入的狀況時，優先關注「平均而言」和「最壞」的狀況，並在必要時明確地表示出你正在考慮的狀況：例如在前一節中，我們看到 insertion sort 在最好、平均和最壞的情況下，花費和次數的乘積加起來分別是一次、二次和二次多項式；則此時我們會說 insertion sort 花費和次數的乘積加起來，平均而言是二次多項式。又例如某知名演算法，在最好、平均和最壞的情況下，花費和次數的乘積加起來的 leading term 分別是 n lg n、n lg n 以及 n<sup>2</sup>，則我們會優先討論平均情況的那個 n lg n，以及最壞情況的 n<sup>2</sup>。</li>
+</ul>
+
+<p>那麼，我們到底要怎麼比較不同演算法或者不同狀況的時間複雜度呢？你應該已經在數學或程式語言中，學過「&lt;」、「&le;」、「==」、「&ge;」以及「&gt;」這五個符號，而比較時間複雜度也有類似的概念，我們直接來看定義，當你把某個演算法的花費和次數的乘積加起來表示成 n 的函數 f(n)，而你要拿他跟 g(n) 比較時：</p>
+<table align=center class="slide">
+	<tr>
+		<th>記號與用法</th>
+		<th>記號讀法</th>
+		<th>類比的運算</th>
+		<th>定義（一般版）</th>
+		<th>定義（極限版）</th>
+	</tr>
+	<tr>
+		<td>f(n) = o(g(n))</td>
+		<td>Little-oh</td>
+		<td>&lt;</td>
+		<td>o(g(n)) = {f(n): <span style="color:red">&forall;</span> positive constant c and n<sub>0</sub> s.t. 0 &le; f(n) <span style="color:red">&lt;</span> c * g(n) &forall; n &ge; n<sub>0</sub>}</td>
+		<td>lim<sub>n &rarr; &infin;</sub> ( f(n) / g(n) ) <span style="color:red">= 0</span></td>
+	</tr>
+	<tr>
+		<td>f(n) = O(g(n))</td>
+		<td>Big-oh</td>
+		<td>&le;</td>
+		<td>O(g(n)) = {f(n): &exist; positive constant c and n<sub>0</sub> s.t. 0 &le; f(n) <span style="color:red">&le;</span> c * g(n) &forall; n &ge; n<sub>0</sub>}</td>
+		<td>lim sup<sub>n &rarr; &infin;</sub> ( f(n) / g(n) ) <span style="color:red">&lt; &infin;</span></td>
+	</tr>
+	<tr>
+		<td>f(n) = &Theta;(g(n))</td>
+		<td>Big-theta</td>
+		<td>==</td>
+		<td>&Theta;(g(n)) = {f(n): &exist; positive constant c<sub>1</sub>, c<sub>2</sub> and n<sub>0</sub> s.t. 0 &le; c<sub>1</sub> * g(n) <span style="color:red">&le;</span> f(n) <span style="color:red">&le;</span> c<sub>2</sub> * g(n) &forall; n &ge; n<sub>0</sub>}</td>
+		<td><span style="color:red">0 &lt;</span> lim inf<sub>n &rarr; &infin;</sub> ( f(n) / g(n) ), and<br>lim sup<sub>n &rarr; &infin;</sub> ( f(n) / g(n) )<span style="color:red"> &lt; &infin;</span></td>
+	</tr>
+	<tr>
+		<td>f(n) = &Omega;(g(n))</td>
+		<td>Big-omega</td>
+		<td>&ge;</td>
+		<td>&Omega;(g(n)) = {f(n): &exist; positive constant c and n<sub>0</sub> s.t. 0 &le; c * g(n) <span style="color:red">&le;</span> f(n) &forall; n &ge; n<sub>0</sub>}</td>
+		<td>lim inf<sub>n &rarr; &infin;</sub> ( f(n) / g(n) ) <span style="color:red">&gt; 0</span></td>
+	</tr>
+	<tr>
+		<td>f(n) = &omega;(g(n))</td>
+		<td>Little-omega</td>
+		<td>&gt;</td>
+		<td>&omega;(g(n)) = {f(n): <span style="color:red">&forall;</span> positive constant c and n<sub>0</sub> s.t. 0 &le; c * g(n) <span style="color:red">&lt;</span> f(n) &forall; n &ge; n<sub>0</sub>}</td>
+		<td>lim<sub>n &rarr; &infin;</sub> ( f(n) / g(n) ) <span style="color:red">= &infin;</span></td>
+	</tr>
+</table>
+
+<p>在上面的表格中：</p>
+<ul>
+	<li>雖然在「記號與用法」一欄，我們在表示兩者關係時使用了等號，但因為等號右側是個集合，所以比較正式的寫法是表示「屬於」的「&isin;」。而在以口語讀出算式時，則該部份讀做「是」或「屬於」都可以。</li>
+	<li>標示紅色的部分，是為了讓各位容易看出差異或需留意之處，並不是數學上的特殊用途。</li>
+	<li>因為演算法的執行時間不可能為負數，所以在極限版定義中不另外正式強調；但如果你套用了該定義在演算法分析以外的情況，則可能需要自行留意。</li>
+	<li>lim sup 以及 lim inf 可以大致想像為數列極限的上下界，而當數列的上下極限相等時，若且唯若此數列收斂。</li>
+</ul>
+
+<p>這些記號在使用上，有下列慣例。此處以 big-oh 說明如下，但另外四個記號亦同：</p>
+<ul>
+	<li>界線要盡可能地貼近：例如 n<sup>2</sup> + 2 * n + 1 = O(2<sup>n</sup> + n<sup>3</sup>) 雖然在數學上是正確的，但一般應寫 n<sup>2</sup> + 2 * n + 1 = O(n<sup>2</sup>)。</li>
+	<li>g(n) 只寫 leading term，並且不加係數：例如 n<sup>2</sup> + 2 * n + 1 = O(5 * n<sup>2</sup> + 4 * n + 3) 雖然在數學上是正確的，但一般應寫 n<sup>2</sup> + 2 * n + 1 = O(n<sup>2</sup>)。
+		<ul>
+			<li>指數函數中，若有 n 加上某個常數，則常數可省略：例如 2<sup>n+1</sup> = 2 * 2<sup>n</sup> = O(2<sup>n</sup>)</li>
+			<li>對數函數中，因為可以換底，所以 log 的底數不影響複雜度：例如 log<sub>10</sub> n = lg n / lg 10 = O(lg n)</li>
+		</ul>
+	</li>
+</ul>
+
+<p>此外，這些記號有以下性質，雖然這些性質在分析演算複雜度時不一定會直接用上，但若對其有所了解，比較不會在看到不同的寫法時愣住：</p>
+<ul>
+	<li>遞移性 transitivity
+		<ul>
+			<li>f(n) = o(g(n)) and g(n) = o(h(n)) &rArr; f(n) = o(h(n))</li>
+			<li>f(n) = O(g(n)) and g(n) = O(h(n)) &rArr; f(n) = O(h(n))</li>
+			<li>f(n) = &Theta;(g(n)) and g(n) = &Theta;(h(n)) &rArr; f(n) = &Theta;(h(n))</li>
+			<li>f(n) = &Omega;(g(n)) and g(n) = &Omega;(h(n)) &rArr; f(n) = &Omega;(h(n))</li>
+			<li>f(n) = &omega;(g(n)) and g(n) = &omega;(h(n)) &rArr; f(n) = &omega;(h(n))</li>
+		</ul>
+	</li>
+	<li>反身性 reflexivity：f(n) = &Theta;(f(n)) = O(f(n)) = &Omega;(f(n))</li>
+	<li>對稱性 symmetry：f(n) = &Theta;(g(n)) &hArr; g(n) = &Theta;(f(n))</li>
+	<li>對稱轉換 transpose symmetry
+		<ul>
+			<li>f(n) = O(g(n)) &hArr; g(n) = &Omega;(f(n))</li>
+			<li>f(n) = o(g(n)) &hArr; g(n) = &omega;(f(n))</li>
+		</ul>
+	</li>
+</ul>
+
+<p>因此，對於先前看過的幾個程式片段，其時間複雜度如下（對於其他演算法的分析，會在後續篇章陸續說明）：</p>
+<ul>
+	<li>這個的複雜度是 O(n)
+<pre class="line-numbers match-braces"><code class="language-python"># 						Cost	Times
+n = 10 #				C1		1
+result = 0 #			C2		1
+for i in range(10): # 	C3		n
+	result += i + 1 #	C4		n
+</code></pre>
+	</li>
+	<li>這個的複雜度是 O(1)
+<pre class="line-numbers match-braces"><code class="language-python"># 							Cost	Times
+n = 10 #					C1		1
+result = n * (n + 1) / 2 #	C2		1
+</code></pre>
+	</li>
+	<li>這個的複雜度是 O(n<sup>3</sup>)
+<pre class="line-numbers match-braces"><code class="language-python"># 											Cost	Times
+for i in range(n): #						C1		n
+	for j in range(n): # 					C2		n * n
+		for k in range(n): #				C3		n * n * n
+			c[i, j] += a[i, k] * b[k, j] #	C4		n * n * n
+</code></pre>
+	</li>
+	<li>這個的複雜度，在最好、平均、最壞的狀況分別是 O(n)、O(n<sup>2</sup>)、O(n<sup>2</sup>)
+<pre class="line-numbers match-braces"><code class="language-python"># 										Cost	Times
+n = len(a) #							C1		1
+for i in range(1, n): # 				C2		n - 1
+	key = a[i] # 						C3		n - 1
+	j = i - 1 # 						C4		n - 1
+	while j >= 0 and a[j] > key: #		C5		Σ_i t_i
+		a[j + 1] = a[j] #				C6		Σ_i (t_i - 1)
+		j -= 1 #						C7		Σ_i (t_i - 1)
+	a[j + 1] = key #					C8		n - 1
+</code></pre>
+	</li>
+	<li>這個的複雜度是 O(lg n)
+<pre class="line-numbers match-braces"><code class="language-python"># 										Cost	Times
+low = 0 #								C1		1
+high = len(a) - 1 #						C2		1
+result = -1 #							C3		1
+while low <= high: #					C4		t s.t.  n // 2 ** t == 1 ==> t = lg n
+	mid = (low + high) // 2 #			C5		lg n
+	if a[mid] == target: #				C6		lg n
+		result = mid #					C7		1
+		break #							C8		1
+	elif a[mid] < target: #				C9		s
+		low = mid + 1 #					C10		s
+	else: #								C11		lg n - s - 1
+		high = mid - 1 #				C12		lg n - s - 1
+</code></pre>
+	</li>
+</ul>
+
+<p>複雜度的分析，在實務上也可以幫助你在面對特定問題時，選擇或設計適當的演算法，以求在可接受的時間內處理問題。以目前（2026 年八月）的一般電腦規格來說：</p>
+<ul>
+	<li>n 在 10<sup>1</sup> 左右時，O(2<sup>n</sup>) 的演算法有機會處理該問題。</li>
+	<li>n 在 10<sup>3</sup> 左右時，可試試看 O(n<sup>2</sup>) 或 O(n<sup>3</sup>) 的演算法。</li>
+	<li>n 在 10<sup>5</sup> 或 10<sup>6</sup> 左右時，要試著設計出 O(n) 的演算法。</li>
+	<li>n 在 10<sup>7</sup> 以上時，要試著設計出 O(lg n) 的演算法。</li>
+</ul>
+
+</blockquote>
+
+</body></html>

@@ -1,0 +1,81 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>若要分析程式所耗費的資源，我們可以從時間和空間兩個角度著手。本篇章將以時間為主，但對空間做分析的手法也非常類似。</p>
+
+<p>我們首先考慮一段從 1 加到 n 的程式碼，以及其中每一步的資源花費和執行次數的列表如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python"># 						Cost	Times
+n = 10 #				C1		1
+result = 0 #			C2		1
+for i in range(10): # 	C3		n
+	result += i + 1 #	C4		n
+</code></pre>
+
+<p>如果把所有的花費和次數的乘積加起來，則是 (C3 + C4) n + (C1 + C2)，是個一次多項式。當然，你也可以直接用公式計算，則無論 n 是多少，其花費和次數的乘積的和，都只是常數：</p>
+<pre class="line-numbers match-braces"><code class="language-python"># 							Cost	Times
+n = 10 #					C1		1
+result = n * (n + 1) / 2 #	C2		1
+</code></pre>
+
+<p>需要注意的是，一般情況下，在分析演算法執行步驟數的時候，我們不考慮乘除法算的比加減法慢，以及電腦的位元數目限制等狀況。我們接著看其他範例，例如這是兩個 n-by-n 的矩陣乘法的程式碼示意，其每一行的花費和次數的乘積和為 (C3 + C4) n<sup>3</sup> + C2 * n<sup>2</sup> + C1 * n，是個三次多項式：</p>
+<pre class="line-numbers match-braces"><code class="language-python"># 											Cost	Times
+for i in range(n): #						C1		n
+	for j in range(n): # 					C2		n * n
+		for k in range(n): #				C3		n * n * n
+			c[i, j] += a[i, k] * b[k, j] #	C4		n * n * n
+</code></pre>
+
+<p>如果你的程式片段當中有條件判斷，則需要稍微仔細的計算一下，以下是 insertion sort 的程式片段（假設變數 a 是某個已存在的陣列，然後我們要把它由小排到大）與分析，其中 t<sub>i</sub> 代表 i 為某個特定值時，while 迴圈的執行次數；而 while 迴圈內部，每圈會少跑一次的原因是 while 迴圈本身需要多一次條件判斷為 False 時才會停止：</p>
+<pre class="line-numbers match-braces"><code class="language-python"># 										Cost	Times
+n = len(a) #							C1		1
+for i in range(1, n): # 				C2		n - 1
+	key = a[i] # 						C3		n - 1
+	j = i - 1 # 						C4		n - 1
+	while j >= 0 and a[j] > key: #		C5		Σ_i t_i
+		a[j + 1] = a[j] #				C6		Σ_i (t_i - 1)
+		j -= 1 #						C7		Σ_i (t_i - 1)
+	a[j + 1] = key #					C8		n - 1
+</code></pre>
+
+<p>因此其總次數為 C1 + (C2 + C3 + C4 + C8)(n - 1) + C5 &Sigma;<sub>i</sub>t<sub>i</sub> + (C6 + C7) &Sigma;<sub>i</sub>(t<sub>i</sub> - 1)。而當陣列 a</p>
+<ul>
+	<li>已經是由小排到大時，每個 t<sub>i</sub> 都只會跑一次，因此總次數是個一次多項式。</li>
+	<li>很倒楣的是由大排到小時，t<sub>i</sub> 依序會跑 1、2、3、...、n-1 次，即 &Sigma;<sub>i</sub>t<sub>i</sub> 是個二次多項式，因此總次數也顯而易見的是個二次多項式。</li>
+	<li>整體呈現未排序時，t<sub>i</sub> 平均會跑 0.5、1、1.5、...、(n-1)/2 次，因此總次數也跟由大排到小時一樣，是個二次多項式。</li>
+</ul>
+
+<p>而花費和次數的乘積加起來，當然不一定要是多項式，我們來看看其他例子。假設你有玩過終極密碼的話，可能會喜歡先猜給定範圍的正中間的那個數字，然後依據出題者對範圍的更新，再去猜剩下大或小那一半的正中間，依此類推。這個在演算法上叫做 binary search，該問題是要對一個已排序的陣列，依前述的方法做搜尋，程式片段與分析如下；其中因為最好運的狀況是一次就猜中，因此以下的分析，以最倒楣的狀況，即範圍縮到最小才猜中為主：</p>
+<pre class="line-numbers match-braces"><code class="language-python"># 										Cost	Times
+low = 0 #								C1		1
+high = len(a) - 1 #						C2		1
+result = -1 #							C3		1
+while low <= high: #					C4		t s.t.  n // 2 ** t == 1 ==> t = lg n
+	mid = (low + high) // 2 #			C5		lg n
+	if a[mid] == target: #				C6		lg n
+		result = mid #					C7		1
+		break #							C8		1
+	elif a[mid] < target: #				C9		s
+		low = mid + 1 #					C10		s
+	else: #								C11		lg n - s - 1
+		high = mid - 1 #				C12		lg n - s - 1
+</code></pre>
+
+<p>在上述的分析中，n 為陣列 a 的長度，「lg」代表以 2 為底的對數，而花費和次數的乘積的和，會是 lg n 乘上某個常數 Ca 再加上某個常數 Cb。</p>
+
+<p>到目前為止，除了遞迴以外的程式碼，你應該幾乎都不難看出其花費和次數的乘積的和，是 n 的什麼函數。但是當你面對某個問題，想出了多種解法，而每個解法都是 n 的不同函數時，我們要怎麼來認定誰比較好呢？</p>
+
+</blockquote>
+
+</body></html>
