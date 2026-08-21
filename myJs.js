@@ -37,3 +37,32 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 });
+
+function createStepAnimation({ imgId, prevBtnId, nextBtnId, resetBtnId, steps }) {
+	const img = document.getElementById(imgId);
+	const prevBtn = document.getElementById(prevBtnId);
+	const nextBtn = document.getElementById(nextBtnId);
+	const resetBtn = document.getElementById(resetBtnId);
+	let idx = 0;
+
+	function render() {
+		img.src = steps[idx];
+		prevBtn.disabled = idx === 0;
+		nextBtn.disabled = idx === steps.length - 1;
+		resetBtn.disabled = idx === 0; // 已經在開頭時，回到開頭也沒意義
+	}
+
+	prevBtn.addEventListener("click", () => {
+		if (idx > 0) { idx -= 1; render(); }
+	});
+
+	nextBtn.addEventListener("click", () => {
+		if (idx < steps.length - 1) { idx += 1; render(); }
+	});
+
+	resetBtn.addEventListener("click", () => {
+		if (idx !== 0) { idx = 0; render(); }
+	});
+
+	render();
+}

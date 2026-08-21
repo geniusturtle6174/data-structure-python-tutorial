@@ -1,0 +1,57 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>括號是否有配對的檢查，是堆疊的經典應用之一。如果是用人眼來判斷的話，你可能會想出以下的方法：</p>
+<ol>
+	<li>找到一個左右括號直接相遇的地方，把它們劃掉。</li>
+	<li>反覆執行上一步，直到無可執行為止；此時如果括號沒有剩下就是配對成功，否則就是失敗。</li>
+</ol>
+
+<p>但你可能知道，要在程式中實作「把字串中間劃掉再重新接起來」，在系統底層其實是 O(n) 的時間複雜度，因此前述方法的複雜度會是 O(n<sup>2</sup>)。因此你可能接著會試圖維護幾個變數，來代表現在已經劃掉的左右邊界；但是劃掉的部分未必是連續的，因此你很快就會發現例如「((())(()))」這種狀況不好處理。</p>
+
+<p>但其實，劃掉的這個動作，可以跟堆疊天然地產生關聯。我們可以利用堆疊，設計出以下方法：</p>
+<ol>
+	<li>從最左邊開始一個一個一個前進。</li>
+	<li>碰到左括號，就 push 進堆疊。</li>
+	<li>碰到右括號，就從堆疊 pop 一個出來，如果 pop 失敗則配對失敗。</li>
+	<li>走到結尾後，堆疊為空則配對成功，反之為失敗。</li>
+</ol>
+
+<p>上述的步驟，寫成程式碼則如下；你如果想測試其他的輸入，可以自行修改：</p>
+<pre class="line-numbers match-braces"><code class="language-python">def chk_parentheses_match(p_str):
+	stack = []
+
+	for c in p_str:
+		if c == '(':
+			stack.append(c)
+		else:
+			if len(stack) == 0:
+				return False
+			stack.pop()
+
+	if len(stack) == 0:
+		return True
+	return False
+
+
+if __name__ == '__main__':
+	print(chk_parentheses_match('((())(()))'))
+</code></pre>
+
+<p>上述範例只處理了字串中只含左右小括號的狀況，如果你希望應對一般的運算式，即會出現數字或加減乘除等字元，或者大中小三種括號時，需要自己再多加一些判斷條件。而關於此範例的時間複雜度，由於我們只有一層迴圈掃過輸入資料，而迴圈內的每個動作都是 O(1)，因此演算法整體的時間複雜度是 O(N)。</p>
+
+</blockquote>
+
+</body></html>

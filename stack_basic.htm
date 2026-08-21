@@ -1,0 +1,143 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>堆疊(stack)是一種先進後出(First In Last Out, FILO)的資料結構，亦即比較早被放進去的，會比較晚才能被拿出來。生活中最常見的堆疊範例是品※洋芋片的罐子，罐底的那片是最早被放進去的，但是以普通的吃法（不破壞罐子、不搖碎洋芋片、...），且拿出來就當作被吃掉來說，罐底那片會最晚才被吃到。</p>
+<center><img src="pics/stack_prxxxles.png" height="40%"></center>
+
+<p>而對於一罐品※洋芋片，你至少要可以放入一片洋芋片，以及拿出一片最頂端的洋芋片；對應到堆疊的專有名詞，則分別是 push 和 pop。此外，你可能還可以進行其他操作，例如看看最上面那一片、看看罐子裡還有幾片洋芋片、看看罐子裡是否空了、看看罐子是否滿了、...等等；這些操作則沒有規定的名稱，但通常可能會被稱為 top、size、is_empty、is_full、...等等。</p>
+
+<p>堆疊的 push 和 pop，在 Python 當中可以很自然地用 list 的 append 和 pop 來完成：</p>
+<pre class="line-numbers match-braces"><code class="language-python">a = []
+
+a.append(3)
+a.append(4)
+r = a.pop()
+r = a.pop()
+r = a.pop() # Leads to error
+a.append(567)
+r = a.pop()
+r = a.pop() # Leads to error
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>Python 的 list 的 pop，在遇到沒有元素的狀況，會產生 error，因此你若希望範例完整順利的跑完，則須要把相關的部分註解掉。</li>
+	<li><b>Question:</b> 如果把每個可以正常執行的 r 都印出來，則結果會是什麼？</li>
+	<li><b>Question:</b> 如果每執行一個動作，你就用 print(a) 印出整個 list 來看看，則每行的結果會是什麼？</li>
+	<li><b>Question:</b> 如何查看堆疊最頂端的元素？如何查看堆疊的大小？如何查看堆疊是否為空？</li>
+</ul>
+
+<p>用某些其他語言實作堆疊時，或者當你有效能等特殊考量時，可能會先把所需要的空間一次配置完畢，然後多設立一個變數，來代表堆疊現在長到哪裡：</p>
+<pre class="line-numbers match-braces"><code class="language-python">a = [0 for _ in range(3)]
+top = 0
+
+# push 3
+a[top] = 3
+top += 1
+
+# push 4
+a[top] = 4
+top += 1
+
+# pop
+top -= 1
+r = a[top]
+print(top)
+
+# pop
+top -= 1
+r = a[top]
+print(top)
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>為了範例簡潔，所以暫時沒有考慮「預先配置的空間不夠了，需要配置新的空間」的狀況。</li>
+	<li>變數 top 的值是「下一個值可以被放的位置」，所以一開始是 0，而 pop 時要先減 1 再取值；但也有人會設計成「最後被放進去的值的位置」，此時 top 一開始就會是 -1，並且於 pop 時要先取值再減 1。</li>
+	<li>當我們談論堆疊的大小時，一般是指堆疊裡面的元素數量，而不是指已配置的空間大小。「已配置的空間大小」通常被稱為「容量(capacity)」。</li>
+	<li><b>Question:</b> 如果結尾再多 pop 一次，或者一開始就 pop 個幾次的話，會發生什麼事？</li>
+</ul>
+
+<p>我們把前一個範例包裝成物件導向，並同時解決「一些已知問題」，例如預先配置空間不足，以及堆疊沒東西時的 pop 應該回傳特定值或者噴錯誤：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class Stack:
+	def __init__(self, k=10):
+		assert k > 0
+		self.k = k
+		self.a = [None for _ in range(self.k)]
+		self.top = 0
+
+	def push(self, v):
+		self.a[self.top] = v
+		self.top += 1
+		if self.top == self.k:
+			self.a += [None for _ in range(self.k)]
+			self.k += self.k
+
+	def pop(self):
+		if self.top == 0:
+			return None
+		self.top -= 1
+		return self.a[self.top]
+
+
+S = Stack(50)
+S.push(3)
+S.push(4)
+print(S.pop()) # 4
+print(S.pop()) # 3
+print(S.pop()) # None
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>對於「預先配置空間不足」的處理，實務上還有其他做法，例如每次都是翻倍，或者根據當下已使用空間的大小來做處理等等。</li>
+	<li>也有一些較進階的實作，會在空間使用率下降時，回收閒置的空間，但範例中未展示。</li>
+	<li>對於 top、size、is_empty、is_full 等方法的實作，留給各位自行練習。</li>
+</ul>
+
+<p>對於堆疊各項操作的時間複雜度，說明則如下：</p>
+<table align=center class="slide">
+	<tr><th>操作</th><th>時間複雜度</th></tr>
+	<tr>
+		<td>Push</td>
+		<td>
+			<p>假設有無限大的連續空間可使用的理想狀況下，因為就只是在指定位置放個東西而已，而陣列的存取操作是 O(1)，因此 push 可以直接當作 O(1)。</p>
+			<p>考慮到需要配置新空間時，即陣列的大小已達到 k 時，則那次的 push 因為有跑個迴圈，所以是 O(k)；但因為每 k 次只會碰到那一次，所以整體平均下來的複雜度還是 O(1)。</p>
+		</td>
+	</tr>
+	<tr>
+		<td>Pop</td>
+		<td>不論堆疊大小是多少，最多都是一樣數量的操作步驟，因此是 O(1)。</td>
+	</tr>
+	<tr>
+		<td>Top</td>
+		<td>此操作是固定依照變數的值去做檢查以及從陣列取值，而陣列取出任何一個地方的值都是 O(1)，所以 top 的操作是 O(1)。當然你如果每次都故意從陣列的開頭開始掃，那就會變成 O(n)。</td>
+	</tr>
+	<tr>
+		<td>Size</td>
+		<td rowspan="2">可以單純透過檢查變數值來進行，因此是 O(1)。</td>
+	</tr>
+	<tr>
+		<td>Is_empty</td>
+	</tr>
+	<tr>
+		<td>Is_full</td>
+		<td>前面的範例會持續的配置空間，並沒有另外設置上限（把記憶體用滿的狀況，不在本課程討論範圍內），因此此操作無意義。而如果你設定了上限，並在空間配置時最多只配到此上限，則 is_full 的操作因為只需要單純的檢查變數，因此是 O(1)。</td>
+	</tr>
+</table>
+
+</blockquote>
+
+</body></html>

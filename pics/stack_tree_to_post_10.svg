@@ -1,0 +1,34 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="566" height="345" viewBox="0 0 566 345">
+
+  <!-- 標題：算式本身 -->
+  <text x="283.0" y="30" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#2C2C2A">2 3 +</text>
+
+  <!-- 連線：父節點指向子節點，由上而下依序排列 -->
+  <line x1="270.5" y1="100.0" x2="408.0" y2="135.0" stroke="#5F5E5A" stroke-width="1" />
+  <line x1="408.0" y1="175.0" x2="333.0" y2="210.0" stroke="#5F5E5A" stroke-width="1" />
+  <line x1="333.0" y1="250.0" x2="283.0" y2="285.0" stroke="#5F5E5A" stroke-width="1" />
+  <line x1="333.0" y1="250.0" x2="383.0" y2="285.0" stroke="#5F5E5A" stroke-width="1" />
+  <line x1="408.0" y1="175.0" x2="483.0" y2="210.0" stroke="#5F5E5A" stroke-width="1" />
+
+  <!-- 節點：方框＋文字成對出現，依樹狀走訪順序排列 -->
+  <!-- 節點：-（運算子） -->
+  <rect x="247.5" y="60.0" width="46" height="40" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1" />
+  <text x="270.5" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#0C447C">-</text>
+  <!-- 節點：/（運算子） -->
+  <rect x="385.0" y="135.0" width="46" height="40" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1" />
+  <text x="408.0" y="155.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#0C447C">/</text>
+  <!-- 節點：*（運算子） -->
+  <rect x="310.0" y="210.0" width="46" height="40" rx="8" fill="#FFF3D6" stroke="#C97A00" stroke-width="1" />
+  <text x="333.0" y="230.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#0C447C">*</text>
+  <!-- 節點：4（運算元） -->
+  <rect x="260.0" y="285.0" width="46" height="40" rx="8" fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1" />
+  <text x="283.0" y="305.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#2C2C2A">4</text>
+  <!-- 節點：5（運算元） -->
+  <rect x="360.0" y="285.0" width="46" height="40" rx="8" fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1" />
+  <text x="383.0" y="305.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#2C2C2A">5</text>
+  <!-- 節點：6（運算元） -->
+  <rect x="460.0" y="210.0" width="46" height="40" rx="8" fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1" />
+  <text x="483.0" y="230.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#2C2C2A">6</text>
+
+</svg>

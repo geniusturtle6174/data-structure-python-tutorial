@@ -1,0 +1,215 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>這是我們習慣的運算式，要遵守先乘除後加減的規則：</p>
+
+<p style="text-align:center">2 + 3 - 4 * 5 / 6</p>
+
+<p>各位應該也知道，如果希望優先權較低的加減運算先被計算的話，要加上括號，例如：</p>
+
+<p style="text-align:center">2 + (3 - 4) * 5 / 6</p>
+
+<p>這些算式中的加減乘除等符號，稱為運算子(operator)；2、3、4 等數字，或者代數或程式碼中的 a、b、c 等變數，稱為運算元(operand)；而括號在運算式中，則是個用於表示優先權的標點符號(punctuator)。</p>
+
+<p>我們也可以跟遞迴樹一樣，把運算式畫成樹，稱為運算樹；其中，我們會讓每個有分支的節點（術語：非葉節點）各自代表一個 operator，而左邊分支代表左邊的 operand，右邊分支代表右邊的 operand；每個 operator 的結果算完以後，往上回傳直到頂端。因此，前面的兩個算式可以分別被畫成：</p>
+<center><img src="pics/stack_expr_tree_1.svg"></center>
+
+<p>以及：</p>
+<center><img src="pics/stack_expr_tree_2.svg"></center>
+
+<p>在上面的兩棵樹中，我們可以看到運算的順序不同，畫出來的樹也不同。而你如果只看到樹，想用肉眼（用程式的方法，在樹的專屬篇章才會提到）計算出結果的話，有兩種方式：</p>
+<ul>
+	<li>最底下的先算，算完以後把對應的 operator 劃掉，改成計算結果的 operand，依次一直往上。若有多組運算是相同高度時，雖然哪個先算都無所謂，但是建議由左邊先算。</li>
+	<li>跟程式跑遞迴呼叫一樣，先到左邊算一算，再到右邊算一算；回到中間以後，把中間算完再往上回傳。</li>
+</ul>
+
+<p>我們以算式 2 + 3 - 4 * 5 / 6 為例，用遞迴方式計算的流程如下（為了範例的清楚展示，不會再進出的節點會被拔掉）：</p>
+<center>
+	<div class="step-figure">
+		<img id="ani-expr" src="pics/stack_expr_tree_1.svg">
+		<button id="ani-expr-prev-reset" class="btn-reset-corner" title="回到開頭" aria-label="回到開頭">⟲</button>
+	</div>
+	<br>
+	<button id="ani-expr-prev">←&nbsp;上一步</button>&nbsp;&nbsp;&nbsp;<button id="ani-expr-next">下一步&nbsp;→</button>
+</center>
+<script>
+createStepAnimation({
+	imgId: "ani-expr",
+	prevBtnId: "ani-expr-prev",
+	nextBtnId: "ani-expr-next",
+	resetBtnId: "ani-expr-prev-reset",
+	steps: [
+		"pics/stack_expr_tree_1.svg",
+		"pics/stack_expr_tree_1_ani_01.svg",
+		"pics/stack_expr_tree_1_ani_02.svg",
+		"pics/stack_expr_tree_1_ani_03.svg",
+		"pics/stack_expr_tree_1_ani_04.svg",
+		"pics/stack_expr_tree_1_ani_05.svg",
+		"pics/stack_expr_tree_1_ani_06.svg",
+		"pics/stack_expr_tree_1_ani_07.svg",
+		"pics/stack_expr_tree_1_ani_08.svg",
+		"pics/stack_expr_tree_1_ani_09.svg",
+		"pics/stack_expr_tree_1_ani_10.svg",
+		"pics/stack_expr_tree_1_ani_11.svg",
+		"pics/stack_expr_tree_1_ani_12.svg",
+		"pics/stack_expr_tree_1_ani_13.svg",
+		"pics/stack_expr_tree_1_ani_14.svg",
+		"pics/stack_expr_tree_1_ani_15.svg",
+		"pics/stack_expr_tree_1_ani_16.svg",
+		"pics/stack_expr_tree_1_ani_17.svg",
+	],
+});
+</script>
+
+<p>而雖然程式語法中，在樹上做計算的順序是固定的，但是把運算樹還原回一行算式的時候，除了把 operator 放在中間以外，是有其他表示方法的。事實上，包含我們最習慣的「operator 放在中間」在內，常被使用的算式表達方式，以及其對應的在樹上的輸出時機有以下三種：</p>
+<ul>
+	<li>前序式(prefix expression, Polish Notation)：operator 在前面，即「operator left-operand right-operand」的格式；先輸出自己，再分別遞迴輸出左邊以及右邊。</li>
+	<li>中序式(infix expression)：operator 在中間，即「left-operand operator right-operand」的格式；先遞迴輸出左邊，再輸出自己，最後遞迴輸出右邊。這個是我們平常習慣的格式。</li>
+	<li>後序式(postfix expression, Reverse Polish Notation)：operator 在後面，即「left-operand right-operand operator」的格式；先遞迴輸出左邊，再遞迴輸出右邊，最後輸出自己。</li>
+</ul>
+
+<p>其中，在二元運算（一個 operator 搭配兩個 operands）的狀況下，只有中序式需要用括號來表示優先權；此外，你如果眼尖的話，可能會發現我們沒有介紹到負號怎麼處理。關於這兩種狀況，就先留給各位在若有興趣知道時自行研讀。以下示範怎樣用肉眼看著運算樹輸出後序式（為了範例的清楚展示，不會再進出的節點會被拔掉），前序的部分可以依此類推：</p>
+<center>
+	<div class="step-figure">
+		<img id="ani-ttp" src="pics/stack_tree_to_post_01.svg">
+		<button id="ani-ttp-reset" class="btn-reset-corner" title="回到開頭" aria-label="回到開頭">⟲</button>
+	</div>
+	<br>
+	<button id="ani-ttp-prev">←&nbsp;上一步</button>&nbsp;&nbsp;&nbsp;<button id="ani-ttp-next">下一步&nbsp;→</button>
+</center>
+<script>
+createStepAnimation({
+	imgId: "ani-ttp",
+	prevBtnId: "ani-ttp-prev",
+	nextBtnId: "ani-ttp-next",
+	resetBtnId: "ani-ttp-reset",
+	steps: [
+		"pics/stack_tree_to_post_01.svg",
+		"pics/stack_tree_to_post_02.svg",
+		"pics/stack_tree_to_post_03.svg",
+		"pics/stack_tree_to_post_04.svg",
+		"pics/stack_tree_to_post_05.svg",
+		"pics/stack_tree_to_post_06.svg",
+		"pics/stack_tree_to_post_07.svg",
+		"pics/stack_tree_to_post_08.svg",
+		"pics/stack_tree_to_post_09.svg",
+		"pics/stack_tree_to_post_10.svg",
+		"pics/stack_tree_to_post_11.svg",
+		"pics/stack_tree_to_post_12.svg",
+		"pics/stack_tree_to_post_13.svg",
+		"pics/stack_tree_to_post_14.svg",
+		"pics/stack_tree_to_post_15.svg",
+		"pics/stack_tree_to_post_16.svg",
+		"pics/stack_tree_to_post_17.svg",
+		"pics/stack_tree_to_post_18.svg",
+		"pics/stack_tree_to_post_19.svg",
+	],
+});
+</script>
+
+<p>如果是有了後序式，要把它計算出來的話，也可以利用堆疊來完成；你只需要由左往右掃，並進行以下動作：</p>
+<ul>
+	<li>碰到 operand，則 push 進堆疊。</li>
+	<li>碰到 operator，則 pop 兩個元素出堆疊做計算，將計算結果 push 回堆疊。若 pop 失敗則運算式不合法。</li>
+	<li>處理完輸入後，堆疊裡若恰有一元素，則其為結果，否則為運算式不合法。</li>
+</ul>
+
+<p>程式的實作則如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">def postfix_expr_calc(expr):
+	stack = []
+	for e in expr:
+		print(f'Input {e}, current stack {stack}')
+		if isinstance(e, (int, float)):
+			stack.append(e)
+		else:
+			if len(stack) < 2:
+				return None
+			b = stack.pop()
+			a = stack.pop()
+			if e == '+':
+				stack.append(a + b)
+			elif e == '-':
+				stack.append(a - b)
+			elif e == '*':
+				stack.append(a * b)
+			elif e == '/':
+				stack.append(a / b)
+		print(f'New stack {stack}')
+	if len(stack) != 1:
+		return None
+	return stack[0]
+
+
+if __name__ == '__main__':
+	print(postfix_expr_calc([2, 3, '+', 4, 5, '*', 6, '/', '-']))
+</code></pre>
+
+<p>由於後序式的計算非常簡單，因此在電腦裡面經常被使用；至於從中序式轉為後序式的方法，則也可以利用堆疊來進行；你一樣也只需要由左往右掃，並進行以下動作：</p>
+<ul>
+	<li>碰到 operand，則直接輸出。</li>
+	<li>碰到 operator
+		<ul>
+			<li>若堆疊為空、頂端為左括號，或頂端 operator 優先權較小，則直接 push 進堆疊。</li>
+			<li>若堆疊頂端 operator 優先權較大或相等，則反覆 pop 與輸出，直到堆疊為空或頂端 operator 優先權較小，再 push 進堆疊。</li>
+		</ul>
+	</li>
+	<li>碰到左括號，則 push 進堆疊。</li>
+	<li>碰到右括號，則反覆 pop 與輸出，直到碰上左括號，惟左括號僅 pop 不輸出。</li>
+</ul>
+
+<p>程式的實作則如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">def infix_to_postfix(expr):
+	stack = []
+	ret = []
+	for e in expr:
+		print(f'Input {e}, current stack {stack}, current ret {ret}')
+		if isinstance(e, (int, float)):
+			ret.append(e)
+		elif e in '*/':
+			while len(stack) != 0:
+				if stack[-1] in '*/':
+					ret.append(stack.pop())
+				else:
+					break
+			stack.append(e)
+		elif e in '+-':
+			while len(stack) != 0:
+				if stack[-1] in '+-*/':
+					ret.append(stack.pop())
+				else:
+					break
+			stack.append(e)
+		elif e == '(':
+			stack.append(e)
+		else:
+			while len(stack) != 0:
+				if stack[-1] in '+-*/':
+					ret.append(stack.pop())
+				else:
+					stack.pop()
+					break
+		print(f'New stack {stack}, new ret {ret}')
+	while len(stack):
+		ret.append(stack.pop())
+	return ret
+
+
+if __name__ == '__main__':
+	print(infix_to_postfix([2, '+', '(', 3, '-', 4, ')', '*', 5, '/', 6]))
+</code></pre>
+
+</blockquote>
+
+</body></html>
