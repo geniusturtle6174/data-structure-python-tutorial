@@ -1,0 +1,53 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>在不考慮空間大小的前提下，你可以隨意的 push 一些東西進去堆疊；而在堆疊裡有東西的情況下，你也可以隨意的 pop 一些東西出堆疊；那麼，如果給你那「一些東西」，讓你依序的 push 進堆疊，並隨意的在堆疊不空的時候 pop 出來，直到所有東西都被 push 與 pop 各一次，則是否能製造出某些特定順序，又有某些順序不可能出現呢？</p>
+
+<p>要做這個檢查其實非常的簡單，為了方便稱呼，以下稱讓你依序 push 進去的序列是 S<sub>push</sub>，而等待被檢測是否可由這一連串 push/pop 的操作製造出來的序列為 S<sub>pop</sub>；並且，以下敘述僅考慮所有元素皆不相同的狀況。</p>
+
+<p>首先，由於若 S<sub>pop</sub> 真的可以被這一連串 push/pop 的操作製造出來，則其首個元素 S<sub>pop</sub>[0] 一定是最先被 pop 出來的；因此我們需先將 S<sub>push</sub> 依次的 push 進堆疊，直到看到與 S<sub>pop</sub>[0] 相等的元素為止，然後將它 pop 出來。</p>
+
+<p>接著，由於若 S<sub>pop</sub> 真的可以被這一連串 push/pop 的操作製造出來，則 S<sub>pop</sub>[1] 只可能出現在堆疊頂端，或者 S<sub>push</sub> 當中還沒被 push 進去的部分；如果是前者的話，我們就從堆疊 pop 一個元素出來；如果是後者的話，就跟前一步一樣繼續把 S<sub>push</sub> 依次的 push 進堆疊，直到看到與 S<sub>pop</sub>[1] 相等的元素為止，然後將它 pop 出來。後續的步驟可以依此類推，當然若你發現前述兩種情況都不符合，則代表 S<sub>pop</sub> 無法經由對 S<sub>push</sub> 做最一連串的 push/pop 來得到。</p>
+
+<p>上述的步驟的實作如下，為了方便，範例中會把 S<sub>push</sub> 固定為「ABCDE」，但此演算法不論 S<sub>push</sub> 是否遵守特定順序，皆能正常運作，你也可以試著修改，或者直接將 S<sub>push</sub> 變成函式的參數：</p>
+<pre class="line-numbers match-braces"><code class="language-python">def is_spop_valid(s_pop):
+	s_push = 'ABCDE'
+	stack = []
+	i_push = 0
+	n = len(s_push)
+	for i_pop in range(n):
+		while i_push < n and (len(stack) == 0 or stack[-1] != s_pop[i_pop]):
+			stack.append(s_push[i_push])
+			i_push += 1
+			if i_push == n:
+				break
+		if stack[-1] == s_pop[i_pop]:
+			stack.pop()
+		else:
+			return False
+	return True
+
+
+if __name__ == '__main__':
+	print(is_spop_valid('CABDE'))
+</code></pre>
+
+<p><b>Note:</b> 請自己在 for 迴圈的開頭或某處加入一些 print，來確認迴圈每一輪的堆疊內容。</p>
+
+<p>雖然 for 跟 while 搭配起來，像是巢狀迴圈的 O(n<sup>2</sup>)，但由於每個元素只會被 push 和 pop 最多各一遍，而 push 及 pop 都是 O(1)，因此演算法整體的時間複雜度是 O(n)。此外，你如果想對這個問題做更多的嘗試，也可以參考 LeetCode 的 <a href="https://leetcode.com/problems/validate-stack-sequences">946. Validate Stack Sequences</a>。</p>
+
+</blockquote>
+
+</body></html>

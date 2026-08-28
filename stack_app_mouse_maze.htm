@@ -1,0 +1,75 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>老鼠走迷宮這類題目，就資料結構這門學科要探討的範圍來說，是要用程式模擬老鼠在迷宮中尋找出路的過程。這類問題在實務上也有許多應用，例如在電路設計中，就是用走迷宮的概念，來找出兩個元件間的佈線路徑。本篇的目標，則是探討如何用堆疊來找到通往迷宮出口的路。</p>
+
+<p>使用堆疊來找迷宮出口的方法也非常簡單，就是從起點開始，往固定的方向一直試，撞牆了再依照既定順序換個方向繼續試，所有方向都走不通了就巴庫（倒退）回去，回到還有方向沒試過的地方就再繼續試，直到找到出口為止，或者當所有方向都試過了卻還沒找到出口，就是沒有路徑從起點通往出口。這個方法因為需要反覆地前進倒退，所以很自然地會跟堆疊產生關聯：前進的時候就把路徑 push 進堆疊，需要後退的時候就使用 pop。</p>
+
+<p>上述方法的實作如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">def is_valid(maze, x, y, direction, dir_map):
+	m = len(maze)
+	n = len(maze[0])
+	xp = x + dir_map[direction][0]
+	yp = y + dir_map[direction][1]
+	if xp >= 0 and xp < m and yp >= 0 and yp < n and maze[xp][yp] == 0:
+		return True
+	return False
+
+
+def maze_route(maze, begin, end):
+	dir_map = ((-1, 0), (0, 1), (1, 0), (0, -1))
+	stack = [(begin[0], begin[1], 0)]
+	while len(stack) > 0:
+		curr_x, curr_y, curr_dir = stack.pop()
+		maze[curr_x][curr_y] = 1
+		if curr_x == end[0] and curr_y == end[1]:
+			return stack
+		while curr_dir <= 3:
+			if is_valid(maze, curr_x, curr_y, curr_dir, dir_map):
+				stack.append((curr_x, curr_y, curr_dir))
+				stack.append((
+					curr_x + dir_map[curr_dir][0],
+					curr_y + dir_map[curr_dir][1],
+					0,
+				))
+				break
+			curr_dir += 1
+	return None
+
+
+if __name__ == '__main__':
+	maze = [
+		[0, 0, 0, 0, 0],
+		[0, 1, 1, 0, 0],
+		[0, 0, 0, 0, 1],
+		[0, 0, 1, 1, 0],
+		[0, 0, 0, 0, 0],
+	]
+	print(maze_route(maze, (0, 0), (4, 4)))
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>函式 is_valid 的作用，是判斷不能走出迷宮外，以及不能走進牆裡面。</li>
+	<li>堆疊中儲存的資訊，是現在的位置，以及現在要嘗試的方向。</li>
+	<li>試過的路徑不需要再試一次，因此標記為牆；但這樣做會讓地圖被修改，因此若你需要保留原始地圖的話，需要將地圖複製一份後再傳入函式；或者修改函式實作，例如先複製一份地圖，並只對複製的那份做標記。</li>
+	<li>由於堆疊的實作方式是串列，因此如果你希望知道從頭開始要怎樣走的話，可以直接從串列的 index 0 開始掃；但若你希望嚴格遵守「堆疊只能 push/pop」的規矩，即不能從最底端開始偷看的話，則應該先把元素 pop 出來後，再 push 進另一個堆疊，以便把順序倒過來。</li>
+</ul>
+
+<p>這樣子的演算法，有個正式名稱是「深度優先搜尋(Depth-First Search, DFS)」，其時間複雜度在本範例而言，由於每個格子最多只會被 push 和 pop 各四次（唯起點若位在四邊都可以走的地方，則連同一開始的 push 在內，最多可能會有五次 push），因此是 O(mn)，其中 m 和 n 分別是迷宮的 row 和 column 的數目。然而各位須留意的是，DFS 只保證若路徑存在的話一定會找到，但是不保證是最短路徑。</p>
+
+</blockquote>
+
+</body></html>
