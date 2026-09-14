@@ -1,0 +1,94 @@
+﻿<html>
+<head>
+    <title>線上教材：資料結構使用蟒蛇</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel=stylesheet type="text/css" href="myCss.css">
+    <script src="myJs.js"></script>
+    <base target="_blank">
+    <link href="prism.css" rel="stylesheet">
+    <script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>鏈結串列(linked list)是一種將資料串連起來的結構。這個結構可以比喻成一列火車，而我們可以從火車頭開始，依次的到每節車廂存取資料，如下：</p>
+<center><img src="pics/linkedlist_Thomas.jpg" height="350px"><br>圖源：<a href="https://zh.wikipedia.org/wiki/File:JNR_C11_227_20140824_003.jpg">維基百科</a></center>
+
+<p>當然，如果你熟悉在熟悉了記憶體的底層配置方式以後，再回來看這個比喻的話，應該比較像是把散落在各處的車廂，用傳送門依次的連接起來，而不是在同一軌道上把一批車廂連成一串。</p>
+
+<p>Linked list 的基本操作，有取得某個位置的值、搜尋某個值是否存在、插入一個值、刪除某個位置的值、取得長度、取得是否為空、...等等。你可能知道，這些操作也可以用一般的陣列來達成；因此，「linked list」這個名稱，其實不是指一種 ADT，而是相對於一般陣列的另一種實作手段。以下會先介紹這種手段的各個基本細節，最後再跟陣列做比較。</p>
+
+<p>而就像火車的每節車廂，可能搭載一些乘客或存放貨物，以及有連結器（或傳送門）讓你前往下一個車廂一樣；linked list 的具體結構，也是有許多節點，每個節點有它本身的資料，以及前往下個節點的傳送門，如下：</p>
+<center><img src="pics/linkedlist_five_nodes.svg"></center>
+
+<p>用程式建構出上圖的 linked list，以及走訪它的方法則如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class ListNode(object):
+    def __init__(self, val=0, next_node=None):
+        self.val = val
+        self.next = next_node
+
+
+# Construct
+head = ListNode(10, None)
+ptr = head
+for v in (20, 30, 40, 50):
+    ptr.next = ListNode(v, None)
+    ptr = ptr.next
+
+# Traverse
+ptr = head
+while ptr:
+    print(ptr.val)
+    ptr = ptr.next
+</code></pre>
+
+<p>上述的建構部分，其分解動作演示如下：</p>
+<center>
+    <div class="step-figure">
+        <img id="ani-llcon" src="pics/linkedlist_construct_01.svg">
+        <button id="ani-llcon-prev-reset" class="btn-reset-corner" title="回到開頭" aria-label="回到開頭">⟲</button>
+    </div>
+    <br>
+    <button id="ani-llcon-prev">←&nbsp;上一步</button>&nbsp;&nbsp;&nbsp;<button id="ani-llcon-next">下一步&nbsp;→</button>
+</center>
+<script>
+createStepAnimation({
+    imgId: "ani-llcon",
+    prevBtnId: "ani-llcon-prev",
+    nextBtnId: "ani-llcon-next",
+    resetBtnId: "ani-llcon-prev-reset",
+    steps: [
+        "pics/linkedlist_construct_01.svg",
+        "pics/linkedlist_construct_02.svg",
+        "pics/linkedlist_construct_03.svg",
+        "pics/linkedlist_construct_04.svg",
+        "pics/linkedlist_construct_05.svg",
+        "pics/linkedlist_construct_06.svg",
+        "pics/linkedlist_construct_07.svg",
+        "pics/linkedlist_construct_08.svg",
+        "pics/linkedlist_construct_09.svg",
+        "pics/linkedlist_construct_10.svg",
+    ],
+});
+</script>
+
+<p>而若要取得特定位置的值，或者搜尋某個值是否存在，則可以很簡單的從走訪的部分修改；而取得長度的操作，則可以藉由多維護一個變數來進行。因此，以下只對比較複雜的插入和刪除來做說明。</p>
+
+<p>插入一個元素：</p>
+
+<p>刪除一個元素：</p>
+
+<p>複雜度：</p>
+<table align=center class="slide">
+    <tr><th>操作</th><th>Linked list</th><th>Array</th></tr>
+    <tr><td>取得 index k 的值</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>搜尋某個值是否存在</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>在 index k 的位置插入一個值</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>在 index k 的位置刪除一個值</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+
+</blockquote>
+
+</body></html>

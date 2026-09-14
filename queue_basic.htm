@@ -1,0 +1,149 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<script>showWarning('本篇的內容，可以跟 stack 對照著看');</script>
+
+<p>佇列(queue)是一種先進先出(First In First Out, FIFO)的資料結構，亦即比較早被放進去的，會比較早就被拿出來。Queue 在生活中最常見的例子就是普通的隊伍，若不考慮插隊或中途離隊等等的特殊情況，則先進入隊伍的人可以先結帳或者先買到票等等，如下：</p>
+<center><img src="pics/queue_nigewaka.png" height="350px"><br>圖源：<a href="https://www.threads.com/@museacg/post/DaM9HEnkezE">木棉花</a></center>
+
+<p>Queue 的基本操作有加入隊伍(enqueue)和離開隊伍(dequeue)；enqueue 時，會從隊伍的尾端(rear/tail)加入元素；dequeue 時，會從隊伍的頭端(front/head)拿出一個元素；此外，你也可以執行其他操作，例如看看隊伍有多長，以及看看隊伍是不是空的等等。</p>
+
+<p>Queue 在 Python 當中，跟 stack 一樣，也可以用 list 來實作：</p>
+<pre class="line-numbers match-braces"><code class="language-python">q = []
+
+q.append(3)
+q.append(4)
+r = q.pop(0)
+r = q.pop(0)
+r = q.pop(0) # Leads to error
+q.append(567)
+r = q.pop(0)
+r = q.pop(0) # Leads to error
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>Append 代表 enqueue，pop(0) 代表 dequeue，即 queue 的尾端在 index 較大的地方，頭端在 index 為 0 的位置。整個範例與 stack 的不同之處，僅在於從 list pop 的時候，是從 index 為 0 的地方拔出一個元素。</li>
+	<li>與 stack 版本相同，Python 的 list 的 pop，在遇到沒有元素的狀況，會產生 error，因此你若希望範例完整順利的跑完，則須要把相關的部分註解掉。</li>
+	<li><b>Question:</b> 如果把每個可以正常執行的 r 都印出來，則結果會是什麼？</li>
+	<li><b>Question:</b> 如果每執行一個動作，你就用 print(a) 印出整個 list 來看看，則每行的結果會是什麼？</li>
+	<li><b>Question:</b> 如何查看 queue 的大小？如何查看 queue 是否為空？</li>
+</ul>
+
+<p>與 stack 相似的是，如果你要使用某些其他語言實作 queue ，或者當你有效能等特殊考量時，也可以先把所需要的空間一次配置完畢；但這次我們需要設立兩個變數，分別代表 queue 的頭端和尾端的位置：</p>
+<pre class="line-numbers match-braces"><code class="language-python">q = [0 for _ in range(5)]
+head = 0
+tail = 0
+
+# enqueue 3
+q[tail] = 3
+tail += 1
+
+# enqueue 4
+q[tail] = 4
+tail += 1
+
+# dequeue
+r = q[head]
+head += 1
+print(r)
+
+# dequeue
+r = q[head]
+head += 1
+print(r)
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>為了範例簡潔，所以暫時沒有考慮「預先配置的空間不夠了，需要配置新的空間」，以及「queue 空了仍要執行 dequeue」的狀況。</li>
+	<li>變數 tail 的值是「下一個值可以被放的位置」，所以一開始是 0；head 則是「dequeue 時要拿的位置」，所以一開始也是 0；但跟 stack 一樣，這些變數也有人會做出不一樣的設計，因此若你有需要處理實作細節時，應該先了解變數的定義。</li>
+	<li>當我們談論 queue 的大小時，一般是指 queue 裡面的元素數量，而不是指已配置的空間大小。「已配置的空間大小」通常被稱為「容量(capacity)」。</li>
+	<li><b>Question:</b> 如果結尾再多 dequeue 一次，或者一開始就 dequeue 個幾次的話，會發生什麼事？</li>
+</ul>
+
+<p>我們把前一個範例包裝成物件導向，並同時解決「一些已知問題」，例如預先配置空間不足，以及 queue 沒東西時的 dequeue 應該回傳特定值或者噴錯誤：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class Queue:
+	def __init__(self, init_capacity=10):
+		assert k > 0
+		self.capacity = init_capacity
+		self.q = [None for _ in range(self.capacity)]
+		self.head = 0
+		self.tail = 0
+
+	def enqueue(self, v):
+		self.q[self.tail] = v
+		self.tail += 1
+		if self.tail == self.capacity:
+			self.q += [None for _ in range(self.capacity)]
+			self.capacity += self.capacity
+
+	def dequeue(self):
+		if self.head == self.tail:
+			return None
+		r = self.q[self.head]
+		self.head += 1
+		if self.head >= self.capacity:
+			del self.q[:self.capacity]
+			self.head -= self.capacity
+			self.tail -= self.capacity
+		return r
+
+
+Q = Queue(50)
+Q.enqueue(3)
+Q.enqueue(4)
+print(Q.dequeue()) # 3
+print(Q.dequeue()) # 4
+print(Q.dequeue()) # None
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>對於「預先配置空間不足」的處理，實務上還有其他做法，例如每次都是翻倍，或者根據當下已使用空間的大小來做處理等等。</li>
+	<li>與 stack 不同的是，queue 的每一次 dequeue，都會使得 head 之前（不含）的空間不再被使用，若你在意這樣的空間浪費，則可以在每當閒置空間大小達到特定標準時，將其歸還給系統。範例的設計是其中一種方式，你也可以設計自己的原則。</li>
+	<li>對於查看 queue 大小或者是否為空等方法的實作，留給各位自行練習。</li>
+</ul>
+
+<p>對於 queue 各項操作的時間複雜度，說明則如下：</p>
+<table align=center class="slide">
+	<tr><th>操作</th><th>時間複雜度</th></tr>
+	<tr>
+		<td>Enqueue</td>
+		<td>
+			<p>假設有無限大的連續空間可使用的理想狀況下，因為就只是在指定位置放個東西而已，而陣列的存取操作是 O(1)，因此 enqueue 可以直接當作 O(1)。</p>
+			<p>考慮到需要配置新空間時，即 tail 的值已達到 k 時，則那次的 enqueue 因為有跑個迴圈，所以是 O(k)；但因為每 k 次只會碰到那一次，所以整體平均下來的複雜度還是 O(1)。</p>
+		</td>
+	</tr>
+	<tr>
+		<td>Dequeue</td>
+		<td>
+			<p>若不處理空間浪費的話，則最多都是一樣數量的操作步驟，因此是 O(1)。</p>
+			<p>考慮到需要釋放舊空間時，即 head 的值已達到 k 時，則那次的 dequeue 的刪除可能在系統底層是 O(k)；但因為每 k 次只會碰到那一次，所以整體平均下來的複雜度還是 O(1)。</p>
+			<p>若用 list 的 pop(0) 當作 dequque，則因為 list 的 pop(0) 是 O(n)，所以這樣子的 dequeue 是 O(n)。</p>
+		</td>
+	</tr>
+	<tr>
+		<td>Size</td>
+		<td rowspan="2">可以單純透過檢查變數值來進行，因此是 O(1)。</td>
+	</tr>
+	<tr>
+		<td>Is_empty</td>
+	</tr>
+</table>
+
+</blockquote>
+
+</body></html>

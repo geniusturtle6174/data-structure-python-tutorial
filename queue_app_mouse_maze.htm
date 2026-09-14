@@ -1,0 +1,87 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<script>showWarning('對於此問題的定義與實務應用，請參照 stack 版');</script>
+
+<p>我們也可以利用 BFS 演算法，來找尋迷宮的出口，具體步驟如下：</p>
+<ol>
+	<li>先把入口位置放進 queue 當中。</li>
+	<li>反覆的 dequeue 一個出來，並計算出所有可能的下一步位置。</li>
+	<li>對上一步的每個可能位置做檢查，若當中有屬於出口者則結束尋找，反之則將其 enqueue。</li>
+</ol>
+
+<p>具體的實作如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">def is_valid(maze, x, y, direction, dir_map):
+	m = len(maze)
+	n = len(maze[0])
+	xp = x + dir_map[direction][0]
+	yp = y + dir_map[direction][1]
+	if xp >= 0 and xp < m and yp >= 0 and yp < n and maze[xp][yp] == 0:
+		return True
+	return False
+
+
+def maze_route(maze, begin, end):
+	dir_map = ((-1, 0), (0, 1), (1, 0), (0, -1))
+	queue = [(begin[0], begin[1], -1)]
+	head = 0
+	while True:
+		if head >= len(queue):
+			return None
+		curr_x, curr_y, _ = queue[head]
+		if curr_x == end[0] and curr_y == end[1]:
+			break
+		for d in range(4):
+			if is_valid(maze, curr_x, curr_y, d, dir_map):
+				queue.append((
+					curr_x + dir_map[d][0],
+					curr_y + dir_map[d][1],
+					head,
+				))
+				maze[curr_x][curr_y] = 1
+		head += 1
+
+	s = []
+	while head >= 0:
+		s.append(queue[head][:2])
+		head = queue[head][2]
+	return s[::-1]
+
+
+if __name__ == '__main__':
+	maze = [
+		[0, 0, 0, 0, 0],
+		[0, 1, 1, 0, 0],
+		[0, 0, 0, 0, 1],
+		[0, 0, 1, 1, 0],
+		[0, 0, 0, 0, 0],
+	]
+	print(maze_route(maze, (0, 0), (4, 4)))
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>函式 is_valid 的內容，與 stack 篇章中的相同。</li>
+	<li>Queue 中儲存的每個元素，都代表一個迷宮中的位置。</li>
+	<li>試過的路徑不需要再試一次，因此標記為牆；但這樣做會讓地圖被修改，因此若你需要保留原始地圖的話，需要將地圖複製一份後再傳入函式；或者修改函式實作，例如先複製一份地圖，並只對複製的那份做標記。</li>
+	<li>為了範例簡潔，檢查是否達標的動作是在 dequeue 時進行；你若追求資源節省，則應該改在 enqueue 時進行。</li>
+	<li>若有興趣知道 queue 在最後長到多大，可以把函式的倒數第三行的「[:2]」移除。</li>
+</ul>
+
+<p>由於我們已經把走過的路徑標記為牆，因此每個座標最多只會被 enqueue 一次，所以 BFS 在此問題的時間複雜度是 O(mn)。</p>
+
+</blockquote>
+
+</body></html>

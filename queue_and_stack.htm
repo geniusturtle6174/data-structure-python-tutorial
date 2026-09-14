@@ -1,0 +1,43 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>Queue 與 stack 雖然完全不同，但只要你能同時持有兩個 queue 或 stack，則其實是可以讓它們分別模擬 stack 和 queue 的。以下將對做法做說明，各位若有興趣進一步了解，可再依此進行實作。</p>
+
+<p>用兩個 stack 模擬 queue 比較簡單。我們讓兩個 stack 中的一個稱為 in_stack，讓它負責 enqueue；另一個稱為 out_stack，負責 dequeue，而：</p>
+<ul>
+	<li>Enqueue 時，一律 push 進 in_stack。</li>
+	<li>Dequeue 時，若 out_stack 為空，則把 in_stack 中的所有元素一個一個一個的 pop 出來，再立刻 push 進 out_stack；此時，out_stack 中 pop 的順序，就會是先前 enqueue 的順序，所以只要從 out_stack pop 一個元素出來，就等於是 dequeue。當然，若 out_stack 當中已有元素，則你應該直接對 out_stack 做 pop。</li>
+</ul>
+
+<p>對於其時間複雜度，enqueue 顯然是 O(1)；而對於 dequeue，雖然其中某一次有可能非常倒楣的遇到需要複雜度為 O(n) 的大搬風，但整體而言，每個元素最多只會被 push 與 pop 各兩次，因此平均下來的複雜度，仍可視為 O(1)。</p>
+
+<p>用兩個 queue 模擬 stack 的邏輯則稍微複雜一些。我們需要準備兩個 queue，分別稱為 main_queue 和 secondary_queue，而：</p>
+<ul>
+	<li>Push 時，
+		<ol>
+			<li>把元素 enqueue 進 secondary_queue。</li>
+			<li>把 main_queue 的元素一個一個一個的 dequeue 再立刻 enqueue 進 secondary_queue。</li>
+			<li>把 main_queue 和 secondary_queue 的身分對調。</li>
+		</ol>
+		此時，新的 main_queue（舊的 secondary_queue）當中，dequeue 的順序，就是先前 push 的倒序。
+	</li>
+	<li>Pop 時，直接對 main_queue 做 dequeue。</li>
+</ul>
+
+<p>對於其時間複雜度，由於每次的 push 都需要大搬風，因此是 O(n)（再乘上你 dequeue 的時間複雜度），而 pop 則因為本身就是一次 dequeue，所以會直接與 dequeue 的時間複雜度相同。</p>
+
+</blockquote>
+
+</body></html>

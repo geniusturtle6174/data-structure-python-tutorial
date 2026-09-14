@@ -1,0 +1,73 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>約瑟夫問題的原始內容，是有 n 個人被俘虜了，看守的人讓大家圍成一圈，每 k 個人要處理掉最後那一個人，一直循環進行，直到剩下一人後放走</p>
+
+<p>對於這個問題，如果只關心最後會剩下誰，則有遞迴公式 J(n, k) = (J(n-1, k) + k) % n 可以幫你求解。若對遞迴式是如何推導而來有興趣，請自行查詢網路資料；在資料結構課程中，各位則可以試著分析其時間複雜度。</p><!-- 遞迴呼叫沒有分支，且只會呼叫 O(n) 層，每層動作是 O(1)，所以整體是 O(n) -->
+
+<p>但如果需要知道被處理掉的人，是以怎樣的順序被處理的，則需要進行模擬。模擬的演算法中，有複雜度較低的進階做法，但不在本課程範圍內，本篇將用 circular queue 進行模擬。具體的做法也非常直覺，就是反覆的 dequeue 和 enqueue，但是每 k 次 dequeue 當中，最後一次不做 enqueue。整體的實作如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class CircularQueue:
+	def __init__(self, capacity=10):
+		assert capacity > 0
+		self.capacity = capacity
+		self.q = [None for _ in range(self.capacity)]
+		self.size = 0
+		self.head = 0
+		self.tail = 0
+
+	def enqueue(self, v):
+		if self.size == self.capacity:
+			return None
+		self.q[self.tail] = v
+		self.tail = (self.tail + 1) % self.capacity
+		self.size += 1
+		return 0
+
+	def dequeue(self):
+		if self.size == 0:
+			return None
+		r = self.q[self.head]
+		self.head = (self.head + 1) % self.capacity
+		self.size -= 1
+		return r
+
+n = 20
+k = 3
+Q = CircularQueue(n)
+for i in range(n):
+	Q.enqueue(i)
+
+i = 0
+while Q.size > 1:
+	r = Q.dequeue()
+	if i != k - 1:
+		Q.enqueue(r)
+	else:
+		print('Disposed person:', r)
+	i = (i + 1) % k
+
+print('The Last of Us:', Q.dequeue())
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>CircularQueue 類別的內容，與 circular queue 篇章的版本完全相同。</li>
+	<li>一開始的 enqueue，是為了把全部的 n 的人都放到 queue 當中。</li>
+	<li><b>Question:</b> 對於 k &lt; n 的情況（若不符合可取餘數），請問時間複雜度為何？提示：每淘汰一個人，需要 k 次 dequeue 和 k - 1 次 enqueue，其時間複雜度是 O(k)，請問總共要淘汰幾次？</li><!-- 要淘汰 n - 1 次，所以是 O(nk) -->
+</ul>
+
+</blockquote>
+
+</body></html>

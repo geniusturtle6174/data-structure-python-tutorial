@@ -1,0 +1,114 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>各位應該聽過一個經典問題，即給你五公升和三公升的杯子，要量出四公升的水。本篇將介紹如何利用 queue 來解決這個問題。我們首先對此問題，做比較正式的描述如下（若有興趣，可以自己嘗試其他擴展）：</p>
+<ul>
+	<li>有兩個杯子，容量分別是 a 公升和 b 公升，目標是量出 c 公升的水。</li>
+	<li>水源無限供應，但對杯子的操作只有這三種：
+		<ul>
+			<li>倒滿某一杯</li>
+			<li>倒空某一杯</li>
+			<li>把一杯倒到另一杯，至前者空或後者滿為止</li>
+		</ul>
+	</li>
+</ul>
+
+<p>然後你可能會想要胡亂操作一通碰碰運氣，或者你數學夠好的話，可能知道可以利用輾轉相除法的過程找到一組解<span id="talking-shit-1" style="text-decoration: line-through;"></span>；不過前者可能在腦袋空空又很倒楣的情況下一直繞圈圈找不到解，後者則因為相當於把三種操作依固定順序進行，所以不保證是最佳解。</p>
+
+<script>
+arr = ['證明很簡單，留給讀者做練習', '我有一個很好的證明，但是這裡寫不下'];
+document.getElementById('talking-shit-1').innerHTML = arr[Date.now() % arr.length];
+</script>
+
+<p>透過 queue 來進行，則保證可以在有解的情況下，找到最佳解。具體步驟如下：</p>
+<ol>
+	<li>我們從一個固定狀態，例如代表兩杯都沒有水的 (0, 0) 出發。先把該狀態放進 queue 當中。</li>
+	<li>反覆的 dequeue 一個出來，並計算出所有可能的下一狀態。</li>
+	<li>對上一步的每個狀態做檢查，若當中有 c 則結束尋找，反之則將其 enqueue。</li>
+</ol>
+
+<p>具體的實作如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">a = 5
+b = 3
+c = 4
+
+q = [(0, 0, -1)]
+head = 0
+while True:
+	a_curr, b_curr, _ = q[head]
+	if c in (a_curr, b_curr):
+		break
+	# Fill A
+	q.append((a, b_curr, head))
+	# Fill B
+	q.append((a_curr, b, head))
+	# Empty A
+	q.append((0, b_curr, head))
+	# Empty B
+	q.append((a_curr, 0, head))
+	# Pour A to B
+	if a_curr >= b - b_curr:
+		a_new = a_curr - (b - b_curr)
+		b_new = b
+	else:
+		a_new = 0
+		b_new = b_curr + a_curr
+	q.append((a_new, b_new, head))
+	# Pour B to A
+	if b_curr >= a - a_curr:
+		a_new = a
+		b_new = b_curr - (a - a_curr)
+	else:
+		a_new = a_curr + b_curr
+		b_new = 0
+	q.append((a_new, b_new, head))
+	# Update head
+	head += 1
+
+s = []
+while head >= 0:
+	s.append(q[head][:2])
+	head = q[head][2]
+print(s[::-1])
+</code></pre>
+
+<p>在上述範例中：</p>
+<ul>
+	<li>Queue 中每個元素的第三個(index: 2)數字，代表其來源位置；-1 代表初始狀態，沒有來源。</li>
+	<li>為了範例簡潔，檢查是否達標的動作是在 dequeue 時進行；你若追求資源節省，則應該改在 enqueue 時進行。</li>
+	<li>若有興趣知道 queue 在最後長到多大，可以把倒數第三行的「[:2]」移除。</li>
+	<li>承上，你如果想要更節省資源，可以試著避免把走過的狀態 enqueue，例如不要反覆的倒滿 A 以及倒空 A。</li>
+	<li>只考慮有解的情況。對於無解的情況，請利用數學判斷。<span id="talking-shit-2" style="text-decoration: line-through;"></span></li>
+</ul>
+
+<script>
+arr = ['證明很簡單，留給讀者做練習。', '我有一個很好的證明，但是這裡寫不下。'];
+document.getElementById('talking-shit-2').innerHTML = arr[Date.now() % arr.length];
+</script>
+
+<p>這樣子的演算法，有個正式名稱是「廣度優先搜尋(Breadth-First Search, BFS)」，其時間複雜度在本範例而言，由於：</p>
+<ul>
+	<li>倒水的可能狀態最多只有 ab 種</li>
+	<li>每個狀態的下一步總共有 6 種可能</li>
+	<li>沒有避免把走過的狀態 enqueue 時，最多要走 ab 步</li>
+</ul>
+
+<p>因此，時間複雜度是 O(6<sup>ab</sup>)。</p>
+
+<p><b>Question:</b> 如果有避免把走過的狀態 enqueue，則時間複雜度會是多少？提示：檢查某個元素在不在某個群體當中有不同的做法，時間複雜度也各不相同；若使用 list 的話是 O(n)，使用 dict 或 set 的話則一般會視為 O(1)。</p><!-- 前者 O(aabb)，後者 O(ab) -->
+
+</blockquote>
+
+</body></html>

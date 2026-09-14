@@ -73,6 +73,27 @@ button:disabled {
 	background-color: rgba(0, 0, 0, 0.05); /* hover 到按鈕本身時，給一點點視覺回饋 */
 }
 
+/* 表格卷軸 */
+.table-scroll-wrapper {
+	overflow-x: auto;
+	max-width: 100%;
+}
+.table-scroll-wrapper table {
+	white-space: nowrap;
+}
+
+.table-scroll-wrapper table.slide td:first-child,
+.table-scroll-wrapper table.slide th:first-child {
+	position: sticky;
+	left: 0;
+	z-index: 2;
+	box-shadow: 1px 0 0 0 #000;
+}
+.table-scroll-wrapper table.slide {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
 a{text-decoration:none;color:blue}
 a:hover{text-decoration:none;color:red}
 .myTitle{font-size:17pt;font-family:"DFKai-sb"}

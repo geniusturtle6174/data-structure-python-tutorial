@@ -1,0 +1,85 @@
+﻿<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>如果你只有固定的一塊記憶體空間能用來當作 queue，則可以把原本一直線的空間，改想像成環狀來使用，稱為環狀佇列(circular queue)。也就是說，對於固定的一塊大小為 n 的空間，原版的 queue 在 enqueue 了 n 次以後，即使用到 index 為 n - 1 的位置以後，就無法再 enqueue；而對於 circular queue 來說，若你先前有 dequeue 過，空出了 index 0 的位置時，則可以讓你 enqueue 至該位置。在具體應用方面，則如嵌入式系統之間傳送資料時，或者音訊處理時，需要錄音或播放等等的緩衝區，都可能使用 circular queue。</p>
+
+<p>以下直接用物件的方式，來展示 circular queue 的實作：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class CircularQueue:
+	def __init__(self, capacity=10):
+		assert capacity > 0
+		self.capacity = capacity
+		self.q = [None for _ in range(self.capacity)]
+		self.size = 0
+		self.head = 0
+		self.tail = 0
+
+	def enqueue(self, v):
+		if self.size == self.capacity:
+			return None
+		self.q[self.tail] = v
+		self.tail = (self.tail + 1) % self.capacity
+		self.size += 1
+		return 0
+
+	def dequeue(self):
+		if self.size == 0:
+			return None
+		r = self.q[self.head]
+		self.head = (self.head + 1) % self.capacity
+		self.size -= 1
+		return r
+
+
+Q = CircularQueue(50)
+Q.enqueue(3)
+Q.enqueue(4)
+print(Q.dequeue()) # 3
+print(Q.dequeue()) # 4
+print(Q.dequeue()) # None
+</code></pre>
+
+<p>在上述範例中，由於 head 跟 tail 相等時，可能代表 queue 是滿的，也可能代表 queue 是空的，因此我們用一個額外的變數，來記錄現在 queue 裡面裝了多少東西，但也有其他做法，是以犧牲一格，或者多使用一些邏輯運算，來避免空跟滿的狀態有誤判。而關於時間複雜度，由於 enqueue 和 dequeue 都只有執行固定動作，與 queue 的大小等狀況無關，所以是 O(1)。</p>
+
+<p>Queue 的另一種變形是雙向佇列（double-ended queue，簡稱 deque）。基本的 queue 只能由其中一邊進，然後由另一邊出，deque 則是兩邊都可以進出；具體應用則例如網路傳輸中，若要處理即時語音封包等需要緊急插隊處理的狀況時，可以使用 deque。</p>
+
+<p>這個資料結構在 Python 內建的 collections 當中已經有實作。以下直接示範如何使用，下列示範的動作，時間複雜度都是 O(1)：</p>
+<pre class="line-numbers match-braces"><code class="language-python">from collections import deque
+
+d = deque()
+
+d.append(3)
+d.append(4)
+print('After append:', d)
+
+d.appendleft(5)
+d.appendleft(6)
+print('After appendleft:', d)
+
+print('Tail element:', d[-1])
+r = d.pop()
+print('Pop:', r, d)
+
+print('Head element:', d[0])
+r = d.popleft()
+print('Popleft:', r, d)
+
+print('Size:', len(d))
+</code></pre>
+
+<p><b>Note:</b> 請試著在 deque 理應為空的時候執行 pop 或 popleft，看看是否會發生 error。</p>
+
+</blockquote>
+
+</body></html>
