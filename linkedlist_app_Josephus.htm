@@ -1,0 +1,65 @@
+<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<script>showWarning('關於此問題的基本描述，請參照 queue 篇章的相關內容。');</script>
+
+<p>使用 circular linked list 來解決約瑟夫問題，會比用 circular queue 的做法還接近問題的原始描述，因為我們不需要真的把人 dequeue 出來，再把活著的 enqueue 回去，而可以真的像原始描述一樣，每數了 k 個以後，就處理掉最後一個節點。</p>
+
+<p>具體的實作如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+n = 20
+k = 3
+
+# Construct
+head = ListNode(0)
+ptr = head
+for v in range(1, n):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+ptr.next = head
+
+prev = ptr
+ptr = head
+i = 0
+while ptr != ptr.next:
+	if i != k - 1:
+		ptr = ptr.next
+		prev = prev.next
+	else:
+		print('Disposed person:', ptr.val)
+		ptr = ptr.next
+		prev.next = ptr
+	i = (i + 1) % k
+
+print('The Last of Us:', ptr.val)
+</code></pre>
+
+<p>對於其時間複雜度的分析，由於：</p>
+<ul>
+	<li>淘汰的動作本身是 O(1)。</li>
+	<li>「每數 k 個，淘汰最後一個」是 O(k)。</li>
+	<li>總共有 n - 1 個人需要被淘汰。</li>
+</ul>
+
+<p>因此會與使用 circular queue 的版本相同。</p>
+
+</blockquote>
+
+</body></html>

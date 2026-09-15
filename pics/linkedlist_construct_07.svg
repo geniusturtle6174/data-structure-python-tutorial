@@ -11,10 +11,10 @@
   <!-- 目前這一行剛執行完，用淡藍底標示 -->
   <rect x="182" y="72" width="313" height="24" rx="4" fill="#F0F7FD" />
 
-  <text x="190" y="12" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">head = ListNode(10, None)</text>
+  <text x="190" y="12" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">head = ListNode(10)</text>
   <text x="190" y="36" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">ptr = head</text>
   <text x="190" y="60" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">for v in (20, 30, <tspan fill="#C0392B" font-weight="700">40</tspan>, 50):</text>
-  <text x="226" y="84" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">ptr.next = ListNode(v, None)</text>
+  <text x="226" y="84" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">ptr.next = ListNode(v)</text>
   <text x="226" y="108" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="15" dominant-baseline="central" fill="#2C2C2A">ptr = ptr.next</text>
 
   <!-- ===== 鏈結串列狀態圖 ===== -->

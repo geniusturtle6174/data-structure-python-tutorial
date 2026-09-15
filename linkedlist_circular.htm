@@ -1,0 +1,115 @@
+<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>如果我們把 linked list 的最後一個節點的 next，從原來的指向 NULL 改成指向 head 的話，你就得到了一個環狀鏈結串列(circular linked list)。</p>
+
+<p>用程式建構出一個 circular linked list，以及走訪它的方法如下；其中 highlight 的部份，是與普通 linked list 相比的不同處：</p>
+<pre class="line-numbers match-braces" data-line="13,17,20-21"><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+ptr.next = head
+
+# Traverse
+ptr = head
+while True:
+	print(ptr.val)
+	ptr = ptr.next
+	if ptr == head:
+		break
+</code></pre>
+
+<p>要 insert 一個節點在 circular linked list 中間某處的做法如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+ptr.next = head
+
+# Point to 30
+ptr = head.next.next
+
+# Insert between 30 and 40
+ptr.next = ListNode(35, next_node=ptr.next)
+
+# Traverse
+ptr = head
+while True:
+	print(ptr.val)
+	ptr = ptr.next
+	if ptr == head:
+		break
+</code></pre>
+
+<p>對於 insert 在尾端，則因為尾端的 next 已經接回 head 了，所以一樣可以將 ptr 先移動到尾端，再比照 insert 在中間來處理。而 insert 在 head 之前，則比照 insert 在尾端來處理；但對於 head 是否要改成指向新加入的那個節點的問題，你則可以視自己的問題定義或設計需求等狀況來取捨。</p>
+
+<p>刪除節點的狀況也非常類似：</p>
+<ul>
+	<li>刪除中間某個節點時，比照一般的 linked list 處理。</li>
+	<li>刪除尾端的節點時，先將 ptr 移動到尾端的前一個，再比照刪除中間某處的狀況處理。</li>
+	<li>刪除開頭節點時，先將 ptr 移動到尾端，再比照刪除中間某處的狀況處理。而 head 要改指向原本的尾端，或者原本的 head.next，則可以視自己的問題定義或設計需求等狀況來取捨。</li>
+</ul>
+
+<p>下面以刪除中間某處的節點來示範：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+ptr.next = head
+
+# Point to 30
+ptr = head.next.next
+
+# Delete 40
+ptr.next = ptr.next.next
+
+# Traverse
+ptr = head
+while True:
+	print(ptr.val)
+	ptr = ptr.next
+	if ptr == head:
+		break
+</code></pre>
+
+<p>上述操作的時間複雜度分析，可以比照一般的 linked list 來看待，細節就留給各位做練習。</p>
+
+</blockquote>
+
+</body></html>

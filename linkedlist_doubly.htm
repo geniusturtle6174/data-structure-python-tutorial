@@ -1,0 +1,137 @@
+<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>如果我們把 linked list 的節點加上一個 prev 指標，讓他除了可以往後面一個走以外，也可以往先前一個走的話，你就得到了一個雙向鏈結串列(doubly linked list)。</p>
+
+<p>用程式建構出一個 doubly linked list，以及走訪它的方法如下；其中 highlight 的部份，是與普通 linked list 相比的不同處：</p>
+<pre class="line-numbers match-braces" data-line="1,2,4,9,12,14,24-27"><code class="language-python">class DoublyListNode(object):
+	def __init__(self, val, prev_node=None, next_node=None):
+		self.val = val
+		self.prev = prev_node
+		self.next = next_node
+
+
+# Construct
+head = DoublyListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = DoublyListNode(v, prev_node=ptr)
+	ptr = ptr.next
+tail = ptr
+
+# Traverse (forward)
+ptr = head
+while ptr:
+	print(ptr.val)
+	ptr = ptr.next
+print()
+
+# Traverse (backward)
+ptr = tail
+while ptr:
+	print(ptr.val)
+	ptr = ptr.prev
+</code></pre>
+
+<p>要在 doubly linked list 當中插入一個元素時，也可以分成插在開頭、中間某處，或者結尾這三種狀況來討論，整體範例如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class DoublyListNode(object):
+	def __init__(self, val, prev_node=None, next_node=None):
+		self.val = val
+		self.prev = prev_node
+		self.next = next_node
+
+
+# Construct
+head = DoublyListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = DoublyListNode(v, prev_node=ptr)
+	ptr = ptr.next
+
+# Insert before head
+head = DoublyListNode(5, next_node=head)
+head.next.prev = head
+
+# Point to 30
+ptr = head.next.next.next
+
+# Insert between 30 and 40
+ptr.next = DoublyListNode(35, prev_node=ptr, next_node=ptr.next)
+ptr.next.next.prev = ptr.next
+
+# Insert after tail
+ptr = head
+while ptr.next:
+	ptr = ptr.next
+ptr.next = DoublyListNode(55, prev_node=ptr)
+tail = ptr.next
+
+# Traverse (forward)
+ptr = head
+while ptr:
+	print(ptr.val)
+	ptr = ptr.next
+print()
+
+# Traverse (backward)
+ptr = tail
+while ptr:
+	print(ptr.val)
+	ptr = ptr.prev
+</code></pre>
+
+<p>要在一般的 linked list 當中，刪除 head 以外的節點，需要讓指標指到目標的前一個節點；而在 doubly linked list 當中，則可以直接讓指標指到目標節點來操作，如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class DoublyListNode(object):
+	def __init__(self, val, prev_node=None, next_node=None):
+		self.val = val
+		self.prev = prev_node
+		self.next = next_node
+
+
+# Construct
+head = DoublyListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = DoublyListNode(v, prev_node=ptr)
+	ptr = ptr.next
+tail = ptr
+
+# Point to 40
+ptr = head.next.next.next
+
+# Delete 40
+ptr.prev.next = ptr.next
+ptr.next.prev = ptr.prev
+ptr = None
+
+# Traverse (forward)
+ptr = head
+while ptr:
+	print(ptr.val)
+	ptr = ptr.next
+print()
+
+# Traverse (backward)
+ptr = tail
+while ptr:
+	print(ptr.val)
+	ptr = ptr.prev
+</code></pre>
+
+<p>關於時間複雜度的分析，各位可以參考一般的 linked list 練習看看。此外，我們也可以將雙向和環狀這兩種變形結合在一起，有興趣的同學可以自行嘗試。</p>
+
+</blockquote>
+
+</body></html>
