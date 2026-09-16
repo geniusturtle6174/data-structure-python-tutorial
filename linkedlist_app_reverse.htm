@@ -1,0 +1,97 @@
+<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>將 linked list 進行反轉，是一個相當經典的進階操作。本篇將示範如何分別用迴圈與遞迴來進行之。</p>
+
+<p>迴圈版需要三個指標，分別指向現在這個、下面一個、先前一個，並執行以下步驟及依次的往後移動：</p>
+<ol>
+	<li>將現在指標的 next 指向先前一個。</li>
+	<li>讓先前一個的指標，改指向現在這個。</li>
+	<li>讓現在這個的指標，改指向下面一個。如果下面一個不存在，則結束演算法。</li>
+	<li>讓下面一個的指標，改指向再下面的一個。</li>
+</ol>
+
+<p>反轉結束後，記得更新 head 即可。整體的程式實作如下：</p>
+<pre class="line-numbers match-braces" data-line=""><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+
+# Reverse
+prev = None
+curr = head
+succ = head.next
+while True:
+	curr.next = prev
+	prev = curr
+	curr = succ
+	if not curr:
+		break
+	succ = succ.next
+head = prev
+
+# Traverse
+ptr = head
+while ptr:
+	print(ptr.val)
+	ptr = ptr.next
+</code></pre>
+
+<p>遞迴版的作法，則是把下層傳回的節點指標的 next 改指向自己，然後把自己往上回傳；終止條件則是沒有下層時就將自己回傳，不用再往下呼叫。整體範例如下，其中對於反轉後的 head 的更新，是採用「將新的 head 在遞迴中傳遞」的做法；而反轉後的 tail（即反轉前的 head）的 next，則可以在遞迴結束後，另外把它改指向 NULL：</p>
+<pre class="line-numbers match-braces" data-line=""><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+def linked_list_reverse(curr):
+	if not curr.next:
+		return curr, curr
+	succ, new_head = linked_list_reverse(curr.next)
+	succ.next = curr
+	return curr, new_head
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+
+# Reverse
+tail, head = linked_list_reverse(head)
+tail.next = None
+
+# Traverse
+ptr = head
+while ptr:
+	print(ptr.val)
+	ptr = ptr.next
+</code></pre>
+
+<p>對於上述範例的時間複雜度，由於迴圈每一圈和遞迴的每一層都是 O(1)，而迴圈或遞迴執行的次數是 O(n)，因此整體的時間複雜度是 O(n)。</p>
+
+</blockquote>
+
+</body></html>
