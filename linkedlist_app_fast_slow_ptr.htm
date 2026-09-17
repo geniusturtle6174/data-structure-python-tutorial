@@ -1,0 +1,86 @@
+<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>快慢指標是一個經典的解題技巧，它的概念是用一個一次走兩步的快指標，和一個一次走一步的慢指標，兩者同時在資料結構上移動，當快指標發生了先撞牆，或者領先慢指標一整圈，就代表你偵測出了特定的位置或性質。本篇將介紹如何透過讓快慢指標在 linked list 上移動，來偵測出中間節點，或者 linked list 是否有連成環狀。</p>
+
+<p>當然，前述的兩個問題也有其他解法。以偵測出中間節點來說，你可以用一個指標先掃一遍，算出節點個數；然後再掃第二遍，移動到一半的距離，就等於找到中間節點。但若資料是用串流的方式產生，你就無法掃第二次；或者若 linked list 上面其實有環，那這個方法就會停不下來。</p>
+
+<p>以下先示範如何用快慢指標，在沒有環的 linked list 上面找中間節點（若你想處理有環的狀況，可以自己試著跟再下面一個範例結合）：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+
+fast = head
+slow = head
+while fast and fast.next:
+	fast = fast.next.next
+	slow = slow.next
+print(slow.val)
+</code></pre>
+
+<p>在上述範例中，若令節點個數為 n，而 head 指向的節點為 index 0 時，我們要尋找的目標是 index 為 n // 2 的節點。找尋的概念也相當的簡單，因為快指標的速度是慢指標的兩倍，所以快指標走了 n 個節點以後，慢指標就會在 n / 2 的位置。</p>
+
+<p>偵測 linked list 是否有環其實也有其他解法，但也各自有其缺點。例如你可以維護一個集合，把走過的節點位置記錄下來，如果有重複的話就是有環，但這個方法需要多用掉不少空間。你也可以把走過的節點上的 val 改成一個不可能出現的值，但若節點上的 val 沒有任何已知限制，或者沒有權限修改資料時，這個方法就會直接失效。</p>
+
+<p>而要用快慢指標的方法，來判斷 linked list 中是否有環，則只需要看看快指標會撞牆還是會領先慢指標一整圈即可，如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class ListNode(object):
+	def __init__(self, val, next_node=None):
+		self.val = val
+		self.next = next_node
+
+
+def has_cycle(head):
+	fast = head
+	slow = head
+	while fast and fast.next:
+		for _ in range(2):
+			fast = fast.next
+			if fast == slow:
+				return True
+		slow = slow.next
+	return False
+
+
+# Construct
+head = ListNode(10)
+ptr = head
+for v in (20, 30, 40, 50, 60):
+	ptr.next = ListNode(v)
+	ptr = ptr.next
+
+print('Has cycle:', has_cycle(head))
+
+# Add cycle
+ptr_20 = head.next
+ptr_50 = ptr_20.next.next.next
+ptr_50.next = ptr_20
+
+print('Has cycle:', has_cycle(head))
+</code></pre>
+
+<p>對於上述方法的時間複雜度分析，由於指標移動一次是 O(1)，而最多只需要移動 O(n) 次即可完成演算法，因此整體的時間複雜度是 O(n)。</p>
+
+</blockquote>
+
+</body></html>
