@@ -1,0 +1,62 @@
+<html>
+<head>
+	<title>線上教材：資料結構使用蟒蛇</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel=stylesheet type="text/css" href="myCss.css">
+	<script src="myJs.js"></script>
+	<base target="_blank">
+	<link href="prism.css" rel="stylesheet">
+	<script src="prism.js"></script>
+</head>
+
+<body bgcolor="#ccccff">
+
+<blockquote>
+
+<p>若要電腦中儲存多項式，則你會需要記下這個多項式有哪些不同的次方，以及其係數各是多少。這樣的結構，雖然天生可以用普通的 list 來儲存，也就是讓 index 代表次方，value 代表係數；但是當多項式中大部分是缺項時，用普通的 list 來儲存就可能會比較浪費空間，因此應該採用字典或 linked list 等結構。本篇內容將說明如何用 linked list 來儲存多項式，以及進行操作。</p>
+
+<p>其核心概念就是，在原本的節點上，同時儲存次方和係數，如下：</p>
+<pre class="line-numbers match-braces"><code class="language-python">class PolyNode(object):
+	def __init__(self, power, coef, next_node=None):
+		self.power = power
+		self.coef = coef
+		self.next = next_node
+
+
+# Construct
+poly_head = PolyNode(7, 15)
+poly_head.next = PolyNode(3, 5)
+poly_head.next.next = PolyNode(1, 6)
+poly_head.next.next.next = PolyNode(0, 4)
+
+# Display
+ptr = poly_head
+print(f'{ptr.coef}x^{ptr.power}', end='')
+while ptr.next:
+	ptr = ptr.next
+	print(f' + {ptr.coef}x^{ptr.power}', end='')
+print()
+</code></pre>
+
+<p>而如果你建立了兩個降冪排序的多項式 A 和 B，並希望計算 C = A + B 的話，則要用兩個指標分別指到 A 和 B 的開頭，並反覆執行以下動作之一：</p>
+<ol>
+	<li>若兩邊指標已有一邊是 NULL，則把另一邊所剩（若有）的節點，全部在 C 那邊也新增。新增完畢後結束演算法。</li>
+	<li>若兩邊指標所指的次方不同，則：
+		<ol>
+			<li>在 C 那邊新增一個節點，內容與兩邊指標的次方大者的那個相同。</li>
+			<li>兩邊指標的次方大者的，往下移動一格。</li>
+		</ol>
+	</li>
+	<li>若兩邊指標所指的次方相同，則：
+		<ol>
+			<li>檢查兩邊所指的係數，相加後是否為非 0。若是，則在 C 那邊新增一個節點，次方與目前所指的相同，係數為兩邊所指的相加。</li>
+			<li>兩邊指標皆往下移動一格。</li>
+		</ol>
+	</li>
+</ol>
+
+<p>上述演算法的時間複雜度，會是 O(A 的項數 + B 的項數)，實作就留給各位自行練習。</p>
+
+</blockquote>
+
+</body></html>

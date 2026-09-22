@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="365" viewBox="0 0 680 365" xmlns:c2pa="http://c2pa.org/manifest">
+
+  <!-- 箭頭符號定義 -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+  </defs>
+
+  <!-- 說明 -->
+
+  <!-- ===== Row 0：Col 0 = 5, Col 2 = 3 ===== -->
+
+  <rect x="20" y="45" width="70" height="100" fill="#F5F5F4" stroke="#8C8B87" stroke-width="1" />
+  <text x="55" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#2C2C2A">Row 0</text>
+
+  <circle cx="90" cy="95" r="3" fill="#5F5E5A" />
+  <line x1="90" y1="95" x2="130" y2="95" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+
+  <rect x="130" y="70" width="170" height="50" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="1" />
+  <line x1="195" y1="70" x2="195" y2="120" stroke="#185FA5" stroke-width="0.5" />
+  <line x1="260" y1="70" x2="260" y2="120" stroke="#185FA5" stroke-width="0.5" />
+  <text x="162.5" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Col: 0</text>
+  <text x="227.5" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Val: 5</text>
+
+  <circle cx="280" cy="95" r="3" fill="#5F5E5A" />
+  <line x1="280" y1="95" x2="320" y2="95" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+
+  <rect x="320" y="70" width="170" height="50" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="1" />
+  <line x1="385" y1="70" x2="385" y2="120" stroke="#185FA5" stroke-width="0.5" />
+  <line x1="450" y1="70" x2="450" y2="120" stroke="#185FA5" stroke-width="0.5" />
+  <text x="352.5" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Col: 2</text>
+  <text x="417.5" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Val: 3</text>
+
+  <circle cx="470" cy="95" r="3" fill="#5F5E5A" />
+  <line x1="470" y1="95" x2="510" y2="95" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+  <text x="545" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="600" fill="#5F5E5A">NULL</text>
+
+  <!-- ===== Row 1：全為 0，無節點 ===== -->
+
+  <rect x="20" y="145" width="70" height="100" fill="#F5F5F4" stroke="#8C8B87" stroke-width="1" />
+  <text x="55" y="195" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#2C2C2A">Row 1</text>
+
+  <circle cx="90" cy="195" r="3" fill="#5F5E5A" />
+  <line x1="90" y1="195" x2="130" y2="195" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+  <text x="165" y="195" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="600" fill="#5F5E5A">NULL</text>
+
+  <!-- ===== Row 2：Col 0 = 3, Col 1 = 5 ===== -->
+
+  <rect x="20" y="245" width="70" height="100" fill="#F5F5F4" stroke="#8C8B87" stroke-width="1" />
+  <text x="55" y="295" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#2C2C2A">Row 2</text>
+
+  <circle cx="90" cy="295" r="3" fill="#5F5E5A" />
+  <line x1="90" y1="295" x2="130" y2="295" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+
+  <rect x="130" y="270" width="170" height="50" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="1" />
+  <line x1="195" y1="270" x2="195" y2="320" stroke="#185FA5" stroke-width="0.5" />
+  <line x1="260" y1="270" x2="260" y2="320" stroke="#185FA5" stroke-width="0.5" />
+  <text x="162.5" y="295" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Col: 0</text>
+  <text x="227.5" y="295" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Val: 3</text>
+
+  <circle cx="280" cy="295" r="3" fill="#5F5E5A" />
+  <line x1="280" y1="295" x2="320" y2="295" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+
+  <rect x="320" y="270" width="170" height="50" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="1" />
+  <line x1="385" y1="270" x2="385" y2="320" stroke="#185FA5" stroke-width="0.5" />
+  <line x1="450" y1="270" x2="450" y2="320" stroke="#185FA5" stroke-width="0.5" />
+  <text x="352.5" y="295" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Col: 1</text>
+  <text x="417.5" y="295" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#0C447C">Val: 5</text>
+
+  <circle cx="470" cy="295" r="3" fill="#5F5E5A" />
+  <line x1="470" y1="295" x2="510" y2="295" stroke="#5F5E5A" stroke-width="1" marker-end="url(#arrow)" />
+  <text x="545" y="295" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="600" fill="#5F5E5A">NULL</text>
+
+</svg>
