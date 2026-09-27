@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="560" viewBox="0 0 700 560" xmlns:c2pa="http://c2pa.org/manifest">
+
+  <!-- x 軸箭頭 -->
+  <defs>
+    <marker id="axisArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1A1A1A" />
+    </marker>
+  </defs>
+
+  <!-- 座標軸 -->
+  <line x1="70" y1="40" x2="70" y2="440" stroke="#1A1A1A" stroke-width="2" />
+  <line x1="70" y1="440" x2="640" y2="440" stroke="#1A1A1A" stroke-width="2" marker-end="url(#axisArrow)" />
+  <text x="658" y="440" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1A1A1A">n</text>
+
+  <!-- n0 虛線與標籤 -->
+  <line x1="268" y1="440" x2="268" y2="335" stroke="#9E9E9E" stroke-width="1.5" stroke-dasharray="5 4" />
+  <text x="268" y="462" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#1A1A1A">n<tspan baseline-shift="sub" font-size="13">0</tspan></text>
+
+  <!-- cg(n)：淺藍色、單調遞增 -->
+  <path d="M70,428 C150,415 250,350 340,290 C430,230 540,160 620,88"
+        fill="none" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round" />
+  <text x="630" y="75" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#1A1A1A">cg(n)</text>
+
+  <!-- f(n)：深藍紫色。n0 之前有波峰高於 cg(n)；n0 之後先降到波谷，
+       接著再度爬升「頂到」cg(n)（相切但不穿越），示範 <= 不是只在 n0 成立 -->
+  <path d="M70,418 C85,430 95,440 102,433
+           C120,410 150,250 202,188
+           C232,152 250,300 268,338
+           C288,372 308,388 330,378
+           C370,368 410,245 484,193
+           C500,182 545,260 570,250
+           C590,243 605,246 618,248"
+        fill="none" stroke="#4F46E5" stroke-width="3.5" stroke-linecap="round" />
+  <text x="630" y="248" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#1A1A1A">f(n)</text>
+
+  <!-- 結論文字 -->
+  <text x="355" y="520" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1A1A1A">f(n) = O(g(n))</text>
+
+</svg>
