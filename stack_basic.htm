@@ -73,7 +73,7 @@ print(r)
 <p>我們把前一個範例包裝成物件導向，並同時解決「一些已知問題」，例如預先配置空間不足，以及 stack 沒東西時的 pop 應該回傳特定值或者噴錯誤：</p>
 <pre class="line-numbers match-braces"><code class="language-python">class Stack:
 	def __init__(self, init_capacity=10):
-		assert k > 0
+		assert init_capacity > 0
 		self.capacity = init_capacity
 		self.s = [None for _ in range(self.capacity)]
 		self.top = 0
