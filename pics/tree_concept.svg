@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 504 355" width="504" height="355" role="img" xmlns:c2pa="http://c2pa.org/manifest">
+  <title>二元樹示意圖（parent 置中於 child 上方）</title>
+
+  <!-- 邊（先畫，讓節點圓圈蓋在線上） -->
+  <g stroke="#5F5E5A" stroke-width="1.5" fill="none">
+    <line x1="264" y1="50"  x2="132" y2="135"/>  <!-- A-B -->
+    <line x1="264" y1="50"  x2="396" y2="135"/>  <!-- A-C -->
+    <line x1="132" y1="135" x2="60"  y2="220"/>  <!-- B-D -->
+    <line x1="132" y1="135" x2="204" y2="220"/>  <!-- B-E -->
+    <line x1="396" y1="135" x2="444" y2="220"/>  <!-- C-F -->
+    <line x1="204" y1="220" x2="156" y2="305"/>  <!-- E-G -->
+    <line x1="204" y1="220" x2="252" y2="305"/>  <!-- E-H -->
+  </g>
+
+  <!-- 內部節點（有子節點）：藍色系 -->
+  <g fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5">
+    <circle cx="264" cy="50"  r="22"/>  <!-- A -->
+    <circle cx="132" cy="135" r="22"/>  <!-- B -->
+    <circle cx="396" cy="135" r="22"/>  <!-- C -->
+    <circle cx="204" cy="220" r="22"/>  <!-- E -->
+  </g>
+  <g>
+    <text x="264" y="56"  font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">A</text>
+    <text x="132" y="141" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">B</text>
+    <text x="396" y="141" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">C</text>
+    <text x="204" y="226" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">E</text>
+  </g>
+
+  <!-- 葉節點（無子節點）：中性灰 -->
+  <g fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5">
+    <circle cx="60"  cy="220" r="22"/>  <!-- D -->
+    <circle cx="444" cy="220" r="22"/>  <!-- F -->
+    <circle cx="156" cy="305" r="22"/>  <!-- G -->
+    <circle cx="252" cy="305" r="22"/>  <!-- H -->
+  </g>
+  <g>
+    <text x="60"  y="226" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#2C2C2A">D</text>
+    <text x="444" y="226" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#2C2C2A">F</text>
+    <text x="156" y="311" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#2C2C2A">G</text>
+    <text x="252" y="311" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#2C2C2A">H</text>
+  </g>
+
+  <!-- 根節點標註 -->
+  <text x="294" y="46" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" text-anchor="start" fill="#5F5E5A">root</text>
+</svg>

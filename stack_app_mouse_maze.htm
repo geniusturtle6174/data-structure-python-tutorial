@@ -32,17 +32,19 @@ def maze_route(maze, begin, end):
 	dir_map = ((-1, 0), (0, 1), (1, 0), (0, -1))
 	stack = [(begin[0], begin[1])]
 	while len(stack) > 0:
-		curr_x, curr_y = stack.pop()
-		maze[curr_x][curr_y] = 1
-		if curr_x == end[0] and curr_y == end[1]:
+		curr_i, curr_j = stack.pop()
+		print(f'Pop (i, j): ({curr_i}, {curr_j})')
+		maze[curr_i][curr_j] = 1
+		if curr_i == end[0] and curr_j == end[1]:
 			return stack
 		for d in range(4):
-			if is_valid(maze, curr_x, curr_y, d, dir_map):
-				stack.append((curr_x, curr_y))
+			if is_valid(maze, curr_i, curr_j, d, dir_map):
+				stack.append((curr_i, curr_j))
 				stack.append((
-					curr_x + dir_map[d][0],
-					curr_y + dir_map[d][1],
+					curr_i + dir_map[d][0],
+					curr_j + dir_map[d][1],
 				))
+				print(f'Push (i, j): ({stack[-1][0]}, {stack[-1][1]})')
 				break
 	return None
 
@@ -64,6 +66,7 @@ if __name__ == '__main__':
 	<li>Stack 中儲存的每個元素，都代表一個迷宮中的位置。</li>
 	<li>試過的路徑不需要再試一次，因此標記為牆；但這樣做會讓地圖被修改，因此若你需要保留原始地圖的話，需要將地圖複製一份後再傳入函式；或者修改函式實作，例如先複製一份地圖，並只對複製的那份做標記。</li>
 	<li>由於 stack 的實作方式是串列，因此如果你希望知道從頭開始要怎樣走的話，可以直接從串列的 index 0 開始掃；但若你希望嚴格遵守「stack 只能 push/pop」的規矩，即不能從最底端開始偷看的話，則應該先把元素 pop 出來後，再 push 進另一個 stack，以便把順序倒過來。</li>
+	<li>你可以把地圖改成有死路的狀況，就有機會看到一連串的 pop，代表走到死路以後要倒車回去。</li>
 </ul>
 
 <p>這樣子的演算法，有個正式名稱是「深度優先搜尋(Depth-First Search, DFS)」，其時間複雜度在本範例而言，由於每個格子最多只會被 push 和 pop 各四次（唯起點若位在四邊都可以走的地方，則連同一開始的 push 在內，最多可能會有五次 push），因此是 O(mn)，其中 m 和 n 分別是迷宮的 row 和 column 的數目。然而各位須留意的是，DFS 只保證若路徑存在的話一定會找到，但是不保證是最短路徑。</p>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 528 325" width="528" height="325" role="img" xmlns:c2pa="http://c2pa.org/manifest">
+  <title>Left-skewed tree and right-skewed tree</title>
+  <g stroke="#5F5E5A" stroke-width="1.5" fill="none">
+    <line x1="194" y1="50" x2="146" y2="125"/>
+    <line x1="146" y1="125" x2="98" y2="200"/>
+    <line x1="98" y1="200" x2="50" y2="275"/>
+    <line x1="334" y1="50" x2="382" y2="125"/>
+    <line x1="382" y1="125" x2="430" y2="200"/>
+    <line x1="430" y1="200" x2="478" y2="275"/>
+  </g>
+  <circle cx="194" cy="50" r="22" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="194" y="56" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">A</text>
+  <circle cx="146" cy="125" r="22" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="146" y="131" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">B</text>
+  <circle cx="98" cy="200" r="22" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="98" y="206" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">C</text>
+  <circle cx="50" cy="275" r="22" fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5"/>
+  <text x="50" y="281" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#2C2C2A">D</text>
+  <circle cx="334" cy="50" r="22" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="334" y="56" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">A</text>
+  <circle cx="382" cy="125" r="22" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="382" y="131" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">B</text>
+  <circle cx="430" cy="200" r="22" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="430" y="206" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#0C447C">C</text>
+  <circle cx="478" cy="275" r="22" fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5"/>
+  <text x="478" y="281" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" text-anchor="middle" fill="#2C2C2A">D</text>
+</svg>

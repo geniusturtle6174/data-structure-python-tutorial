@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 938 280" width="938" height="280" role="img" xmlns:c2pa="http://c2pa.org/manifest">
+  <title>Binary tree types</title>
+  <text x="70" y="24" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#2C2C2A">Left-skewed tree</text>
+  <g stroke="#5F5E5A" stroke-width="1.5" fill="none">
+    <line x1="115" y1="64" x2="85" y2="124"/>
+    <line x1="85" y1="124" x2="55" y2="184"/>
+    <line x1="55" y1="184" x2="25" y2="244"/>
+  </g>
+  <g fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5">
+    <circle cx="115" cy="64" r="15"/>
+    <circle cx="85" cy="124" r="15"/>
+    <circle cx="55" cy="184" r="15"/>
+  </g>
+  <g fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5">
+    <circle cx="25" cy="244" r="15"/>
+  </g>
+  <text x="253" y="24" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#2C2C2A">Full binary tree</text>
+  <g stroke="#5F5E5A" stroke-width="1.5" fill="none">
+    <line x1="223" y1="64" x2="181" y2="124"/>
+    <line x1="223" y1="64" x2="265" y2="124"/>
+    <line x1="265" y1="124" x2="229" y2="184"/>
+    <line x1="265" y1="124" x2="301" y2="184"/>
+    <line x1="301" y1="184" x2="277" y2="244"/>
+    <line x1="301" y1="184" x2="325" y2="244"/>
+  </g>
+  <g fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5">
+    <circle cx="223" cy="64" r="15"/>
+    <circle cx="265" cy="124" r="15"/>
+    <circle cx="301" cy="184" r="15"/>
+  </g>
+  <g fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5">
+    <circle cx="181" cy="124" r="15"/>
+    <circle cx="229" cy="184" r="15"/>
+    <circle cx="277" cy="244" r="15"/>
+    <circle cx="325" cy="244" r="15"/>
+  </g>
+  <text x="463" y="24" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#2C2C2A">Complete binary tree</text>
+  <g stroke="#5F5E5A" stroke-width="1.5" fill="none">
+    <line x1="463" y1="64" x2="415" y2="124"/>
+    <line x1="463" y1="64" x2="511" y2="124"/>
+    <line x1="415" y1="124" x2="391" y2="184"/>
+    <line x1="415" y1="124" x2="439" y2="184"/>
+    <line x1="511" y1="124" x2="487" y2="184"/>
+    <line x1="511" y1="124" x2="535" y2="184"/>
+  </g>
+  <g fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5">
+    <circle cx="463" cy="64" r="15"/>
+    <circle cx="415" cy="124" r="15"/>
+    <circle cx="511" cy="124" r="15"/>
+  </g>
+  <g fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5">
+    <circle cx="391" cy="184" r="15"/>
+    <circle cx="439" cy="184" r="15"/>
+    <circle cx="487" cy="184" r="15"/>
+    <circle cx="535" cy="184" r="15"/>
+  </g>
+  <text x="757" y="24" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#2C2C2A">Nearly complete binary tree</text>
+  <g stroke="#5F5E5A" stroke-width="1.5" fill="none">
+    <line x1="769" y1="64" x2="673" y2="124"/>
+    <line x1="769" y1="64" x2="865" y2="124"/>
+    <line x1="673" y1="124" x2="625" y2="184"/>
+    <line x1="673" y1="124" x2="721" y2="184"/>
+    <line x1="865" y1="124" x2="817" y2="184"/>
+    <line x1="865" y1="124" x2="913" y2="184"/>
+    <line x1="625" y1="184" x2="601" y2="244"/>
+    <line x1="625" y1="184" x2="649" y2="244"/>
+    <line x1="721" y1="184" x2="697" y2="244"/>
+  </g>
+  <g fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5">
+    <circle cx="769" cy="64" r="15"/>
+    <circle cx="673" cy="124" r="15"/>
+    <circle cx="865" cy="124" r="15"/>
+    <circle cx="625" cy="184" r="15"/>
+    <circle cx="721" cy="184" r="15"/>
+  </g>
+  <g fill="#F3F3F3" stroke="#5F5E5A" stroke-width="1.5">
+    <circle cx="817" cy="184" r="15"/>
+    <circle cx="913" cy="184" r="15"/>
+    <circle cx="601" cy="244" r="15"/>
+    <circle cx="649" cy="244" r="15"/>
+    <circle cx="697" cy="244" r="15"/>
+  </g>
+</svg>
