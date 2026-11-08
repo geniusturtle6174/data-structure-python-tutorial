@@ -13,7 +13,7 @@
 
 <blockquote>
 
-<p>樹(tree)跟 linked list 很類似，都是將資料串起來的結構，看起來就像是一棵樹倒過來長，即開頭的節點稱為根(root)，並從根開始持續分岔，直到抵達葉子(leaf)。其中，一個節點上可以分岔的數量，原則上是沒有特殊限制的，但在大部分的應用中，最多有兩個分岔的二元樹(binary tree)已經很足夠使用，因此本篇主要將介紹二元樹。一棵二元樹的範例如下：</p>
+<p>樹(tree)跟 linked list 很類似，都是將資料串起來的結構，看起來就像是一棵樹倒過來長（<a href="https://www.reddit.com/r/interestingasfuck/comments/tieadw/this_upsidedown_fig_tree_in_bacoli_italy_no_one">範例圖</a>／<a href="pics/tree_upside_down.jpg">近端備份</a>），即開頭的節點稱為根(root)，並從根開始持續分岔，直到抵達葉子(leaf)。其中，一個節點上可以分岔的數量，原則上是沒有特殊限制的，但在大部分的應用中，最多有兩個分岔的二元樹(binary tree)已經很足夠使用，因此本篇主要將介紹二元樹。一棵二元樹的範例如下：</p>
 <center><img src="pics/tree_concept.svg"></center>
 
 <p>在一棵二元樹上，除了前面提到的開頭節點稱為 root，以及沒有再分岔的節點稱為 leaf 以外，還有以下慣例的稱呼：</p>
@@ -85,6 +85,8 @@ print(root.right.left.val) # Leads to error
 <center><img src="pics/tree_different_types.svg" width="99%"></center>
 
 <p>仍然需要留意的是，有些書本或題目，對這些稱呼會有不同的定義，因此各位在閱讀其他內容時，記得先找找看該內容當中是否有先做定義。</p>
+
+<p><b>Questions:</b> 若一棵二元樹有 n 個節點，那最高跟最矮各可能是多少？又，若一棵二元樹高度 h，則最多和最少的節點數各可能是多少？</p><!-- 最高 n-1，最矮 floor(lg n)；最多 2^(h+1)-1，最少 h+1 -->
 
 </blockquote>
 

@@ -18,8 +18,10 @@
 	<li>前序(pre-order)：先處理自己，再處理左子樹，再處理右子樹，即以「中左右」的順序處理。</li>
 	<li>中序(in-order)：先處理左子樹，再處理自己，再處理右子樹，即以「左中右」的順序處理。</li>
 	<li>後序(post-order)：先處理左子樹，再處理右子樹，再處理自己，即以「左右中」的順序處理。</li>
-	<li>層序(level-order)：先處理深度 0 的節點，再處理深度 1 的節點，再處理深度 2 的節點，...，直到所有節點都被處理過。</li>
+	<li>層序(level-order)：先處理深度 0 的節點，再處理深度 1 的節點，再處理深度 2 的節點，...，直到所有節點都被處理過。需要注意的是，一般來說，同層的節點會是左邊先處理。</li>
 </ul>
+
+<p>其中，若你的樹是運算樹，則前、中、後序三種走訪的結果，就是前、中、後序三種運算式（但中序式的括號需要有另外的原則補上，此篇不做相關說明）。</p>
 
 <p>以基礎介紹看過的這棵樹來說，</p>
 <center><img src="pics/tree_concept.svg"></center>
@@ -27,9 +29,9 @@
 <p>四種走訪的順序分別如下：</p>
 <ul>
 	<li>Pre-order: A B D E G H C F</li>
-	<li>In-roder: D B G E H A C F</li>
-	<li>Post-roder: D G H E B F C A</li>
-	<li>Level-roder: A B C D E F G H</li>
+	<li>In-order: D B G E H A C F</li>
+	<li>Post-order: D G H E B F C A</li>
+	<li>Level-order: A B C D E F G H</li>
 </ul>
 
 <p>而在實作上，前、中、後序三種走訪會靠遞迴來實作，而層序則需要用 queue 來實作，如下：</p>
@@ -102,13 +104,26 @@ level_order(root)
 print()
 </code></pre>
 
-<p>反過來說，如果只知道前、中、後序三種走訪順序的其中幾種，那是否可以還原出唯一的樹來呢？很顯然的，如果只知道其中一種順序時，除非像是運算樹那樣，可以透過節點內容來認出誰是葉子，否則是無法還原出唯一的樹的。例如下面這兩棵樹的前序走訪，都是 A B C D：</p>
+<p>反過來說，如果只知道前、中、後序三種走訪順序的其中幾種，那是否可以還原出唯一的樹來呢？很顯然的，如果只知道其中一種順序時，一般來說是無法還原出唯一的樹的。例如下面這兩棵樹的前序走訪，都是 A B C D：</p>
 <center><img src="pics/tree_pre_abcd.svg"></center>
 
-<p>下面這兩棵樹的中序走訪，則都也是 A B C D：</p>
+<p>下面這兩棵樹的中序走訪，則也都是 A B C D：</p>
 <center><img src="pics/tree_in_abcd.svg"></center>
 
 <p>只知道後序走訪為 A B C D 時的狀況，在此先留給各位自行練習。而對於同時知道兩種走訪順序的狀況，如果它們是前序和後序走訪，則也無法保證還原，例如前面那一組兩棵的 left-skewed tree 和 right-skewed tree，其前序走訪都是 A B C D，而後序走訪都是 D C B A。</p>
+
+<p>但在將不同節點用不同字母代表的情況下，如果你知道的是前序和中序（或者中序和後序，下同）走訪，則可以還原出一棵確定的樹。以前序走訪為 A B C D E，和中序走訪為 C B A E D 為例，首先你看了前序走訪，會知道 root 一定是 A，而用 A 把中序走訪分成兩邊，會發現節點 B 和 C 在左子樹，節點 D 和 E 在右子樹，即：</p>
+<center><img src="pics/tree_restore_A_BC_DE.svg"></center>
+
+<p>接著，對於 A 的左子樹，其前序走訪是 B C，即左子樹的 root 是 B，而用 B 把中序的 C B 切開以後，會發現 C 在左子樹，而右子樹是空的，即：</p>
+<center><img src="pics/tree_restore_A_B_C_DE.svg"></center>
+
+<p>而對於 A 的右子樹，其前序走訪是 D E，即右子樹的 root 是 D，而用 D 把中序的 E D 切開以後，會發現 E 在左子樹，而右子樹是空的，即：</p>
+<center><img src="pics/tree_restore_A_B_C_D_E.svg"></center>
+
+<p>但若你是隨便寫下一組自以為的前序和中序走訪，則樹有可能不存在，例如前序走訪為 A B C D E，中序走訪為 C E A B D，則以 A 為 root 分割左右後，看中序走訪的左子樹應包含 C E，但這很明顯的不可能在前序走訪走出 B C，因此樹不存在。</p>
+
+<p>事實上，前、中、後序三種走訪天生就跟遞迴和堆疊相對應。你可以把前序走訪當作進堆疊的順序，中序走訪當作出堆疊的順序；則若能經由堆疊操作讓這樣子的進出方式成立，樹就會存在，反之則不存在。</p>
 
 </blockquote>
 
